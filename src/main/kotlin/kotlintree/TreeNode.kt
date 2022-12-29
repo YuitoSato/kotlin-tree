@@ -1,43 +1,31 @@
 package kotlintree
 
 import java.util.*
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
-@OptIn(ExperimentalContracts::class)
 class TreeNode<T>(
     val value: T,
     val children: MutableList<TreeNode<T>>
 ) {
-    data class FoldItem<T>(
+    private data class FoldItem<T>(
         val treeNode: TreeNode<T>,
         val indexes: List<Int>,
     )
 
     fun <S> foldTree(initial: S, f: (acc: S, treeNode: TreeNode<T>, currentIndexes: List<Int>) -> S): S {
-        contract {
-            callsInPlace(f, InvocationKind.AT_MOST_ONCE)
-        }
-
-        val treeQueue: Queue<FoldItem<T>> = LinkedList()
-        treeQueue += FoldItem(this, emptyList())
+        val queue: Queue<FoldItem<T>> = LinkedList()
+        queue += FoldItem(this, emptyList())
         var acc = initial
 
-        while (treeQueue.isNotEmpty()) {
-            val (treeNode, indexes) = treeQueue.poll()
+        while (queue.isNotEmpty()) {
+            val (treeNode, indexes) = queue.poll()
             acc = f(acc, treeNode, indexes)
-            treeNode.children.withIndex().forEach { (index, childTreeNode) -> treeQueue += FoldItem(childTreeNode, indexes.plus(index)) }
+            treeNode.children.withIndex().forEach { (index, childTreeNode) -> queue += FoldItem(childTreeNode, indexes.plus(index)) }
         }
 
         return acc
     }
 
     fun <S> fold(initial: S, f: (acc: S, element: T, currentIndexes: List<Int>) -> S): S {
-        contract {
-            callsInPlace(f, InvocationKind.AT_MOST_ONCE)
-        }
-
         return foldTree(initial) { acc, treeNode, currentIndexes -> f(acc, treeNode.value, currentIndexes) }
     }
 
@@ -58,17 +46,15 @@ class TreeNode<T>(
         val initial: TreeNode<T>? = null
         return fold(initial) { acc, element, currentIndexes ->
             val condition = predicate(element)
-            if (condition) {
-                val newTree = TreeNode(this.value, mutableListOf())
-                if (acc == null) {
-                    newTree
-                } else {
+            val newTree = TreeNode(element, mutableListOf())
+            when {
+                !condition -> acc
+                acc == null -> newTree
+                else -> {
                     acc.findSubTreeByIndexes(currentIndexes.take(currentIndexes.size - 1))
                         ?.children?.add(newTree)
                     acc
                 }
-            } else {
-                acc
             }
         }
     }
@@ -105,8 +91,3 @@ class TreeNode<T>(
         return "TreeNode($value, $children)"
     }
 }
-
-private data class TreeNodeStackItem<T>(
-    val treeNode: TreeNode<T>,
-    val indexes: List<Int>,
-)

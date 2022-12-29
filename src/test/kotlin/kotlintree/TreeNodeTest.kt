@@ -54,4 +54,59 @@ class TreeNodeTest : DescribeSpec({
             actual shouldBe expected
         }
     }
+
+    describe("filter") {
+        it("filters a tree node that matches a condition.") {
+            val tree = TreeNode(
+                1,
+                mutableListOf(
+                    TreeNode(
+                        11,
+                        mutableListOf(
+                            TreeNode(111, mutableListOf())
+                        )
+                    ),
+                    TreeNode(12, mutableListOf()),
+                    TreeNode(13, mutableListOf())
+                )
+            )
+
+            val actual = tree.filter { it <= 12 }
+
+            val expected = TreeNode(
+                1,
+                mutableListOf(
+                    TreeNode(
+                        11,
+                        mutableListOf()
+                    ),
+                    TreeNode(
+                        12,
+                        mutableListOf()
+                    )
+                )
+            )
+
+            actual shouldBe expected
+        }
+
+        it("returns null if the top of the tree node does not match a condition.") {
+            val tree = TreeNode(
+                1,
+                mutableListOf(
+                    TreeNode(
+                        11,
+                        mutableListOf(
+                            TreeNode(111, mutableListOf())
+                        )
+                    ),
+                    TreeNode(12, mutableListOf()),
+                )
+            )
+
+            val actual = tree.filter { it < 1 }
+
+            actual shouldBe null
+        }
+    }
 })
