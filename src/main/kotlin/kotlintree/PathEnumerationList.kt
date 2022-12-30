@@ -46,8 +46,10 @@ class PathEnumerationList<ID, VALUE> private constructor(
 
     companion object {
 
+        fun <ID, VALUE> of(list: List<PathEnumerationListItem<ID, VALUE>>) = PathEnumerationList(list)
+
         fun <ID, VALUE> of(vararg list: PathEnumerationListItem<ID, VALUE>): PathEnumerationList<ID, VALUE> =
-            PathEnumerationList(list.toList())
+            of(list.toList())
 
         fun <ID, VALUE> fromTreeNode(
             getNodeId: (VALUE) -> ID,

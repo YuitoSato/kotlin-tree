@@ -22,7 +22,7 @@ class AdjacencyListTest : DescribeSpec({
     }
 
     describe("toTreeNode") {
-        it("converts adjacency list to tree node list") {
+        it("converts an adjacency list to tree node list") {
             val actual = AdjacencyList.of(
                 getSelfNodeId = { it },
                 list = listOf(
@@ -50,6 +50,32 @@ class AdjacencyListTest : DescribeSpec({
             actual.treeNodes shouldBe expected
             actual.parentNodeNotFoundList shouldBe AdjacencyList.of(
                 AdjacencyListItem(2, 21, 21)
+            )
+        }
+    }
+
+    describe("fromTreeNode") {
+        it("converts a tree node to an adjacency list") {
+            AdjacencyList.fromTreeNode(
+                getSelfNodeId = { it },
+                nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            11,
+                            mutableListOf(leafOf(111))
+                        ),
+                        leafOf(12)
+                    )
+                )
+            ) shouldBe AdjacencyList.of(
+                getSelfNodeId = { it },
+                listOf(
+                    null to 1,
+                    1 to 11,
+                    1 to 12,
+                    11 to 111
+                )
             )
         }
     }

@@ -33,8 +33,7 @@ class AdjacencyList<ID, VALUE> private constructor(
                 if (level == 0) {
                     tree = newTree
                 } else {
-                    tree?.findSubTreeNodeByIndices(indices.take(indices.size - 1))
-                        ?.children?.add(newTree)
+                    tree?.findSubTreeNodeByIndices(indices.take(indices.size - 1))?.children?.add(newTree)
                 }
                 val children = parentNodeIdToChildren.getOrDefault(listItem.selfNodeId, mutableListOf())
                 parentNodeIdToChildren.remove(listItem.selfNodeId)
@@ -73,6 +72,26 @@ class AdjacencyList<ID, VALUE> private constructor(
                     )
                 }
             )
+
+        fun <ID, VALUE> fromTreeNode(
+            getSelfNodeId: (VALUE) -> ID,
+            treeNode: TreeNode<VALUE>
+        ): AdjacencyList<ID, VALUE> {
+            val initial = emptyList<AdjacencyListItem<ID, VALUE>>()
+            return of(
+                treeNode.fold(initial) { acc, element, currentIndices ->
+                    val level = currentIndices.size
+                    val parentNode = if (level != 0) {
+                        treeNode.findSubTreeNodeByIndices(currentIndices.take(currentIndices.size - 1))
+                    } else null
+                    acc + AdjacencyListItem(
+                        parentNodeId = parentNode?.value?.let(getSelfNodeId),
+                        selfNodeId = getSelfNodeId(element),
+                        value = element
+                    )
+                }
+            )
+        }
     }
 
     override fun hashCode() = this.list.hashCode()
