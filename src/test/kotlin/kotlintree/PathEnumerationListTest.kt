@@ -8,11 +8,13 @@ class PathEnumerationListTest : DescribeSpec({
 
     describe("init") {
         it("must be unique paths in a path enumeration list") {
-            val exception = shouldThrow<Exception> { PathEnumerationList.of(
-                PathEnumerationListItem(1, listOf(1), 1),
-                PathEnumerationListItem(11, listOf(1, 11), 11),
-                PathEnumerationListItem(11, listOf(1, 11), 11),
-            ) }
+            val exception = shouldThrow<Exception> {
+                PathEnumerationList.of(
+                    PathEnumerationListItem(1, listOf(1), 1),
+                    PathEnumerationListItem(11, listOf(1, 11), 11),
+                    PathEnumerationListItem(11, listOf(1, 11), 11),
+                )
+            }
             exception.message shouldBe "Paths must be unique in a path enumeration list."
         }
     }

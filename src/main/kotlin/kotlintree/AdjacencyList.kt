@@ -1,6 +1,7 @@
 package kotlintree
 
-import java.util.*
+import java.util.LinkedList
+import java.util.Queue
 
 class AdjacencyList<ID, VALUE> private constructor(
     private val list: List<AdjacencyListItem<ID, VALUE>>

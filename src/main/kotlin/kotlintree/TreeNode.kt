@@ -1,6 +1,7 @@
 package kotlintree
 
-import java.util.*
+import java.util.LinkedList
+import java.util.Queue
 
 class TreeNode<T>(
     val value: T,
@@ -8,7 +9,7 @@ class TreeNode<T>(
 ) {
     private data class FoldItem<T>(
         val treeNode: TreeNode<T>,
-        val indexes: List<Int>,
+        val indexes: List<Int>
     )
 
     fun <S> foldTree(initial: S, f: (acc: S, treeNode: TreeNode<T>, currentIndexes: List<Int>) -> S): S {
@@ -19,7 +20,8 @@ class TreeNode<T>(
         while (queue.isNotEmpty()) {
             val (treeNode, indexes) = queue.poll()
             acc = f(acc, treeNode, indexes)
-            treeNode.children.withIndex().forEach { (index, childTreeNode) -> queue += FoldItem(childTreeNode, indexes.plus(index)) }
+            treeNode.children.withIndex()
+                .forEach { (index, childTreeNode) -> queue += FoldItem(childTreeNode, indexes.plus(index)) }
         }
 
         return acc
@@ -62,8 +64,7 @@ class TreeNode<T>(
     fun findSubTreeNodeByIndexes(indexes: List<Int>): TreeNode<T>? {
         var current = this
         indexes.forEach { index ->
-            val currentOpt = current.children.getOrNull(index)
-            if (currentOpt == null) return currentOpt
+            val currentOpt = current.children.getOrNull(index) ?: return null
             current = currentOpt
         }
         return current
