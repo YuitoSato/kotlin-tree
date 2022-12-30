@@ -9,10 +9,13 @@ class AdjacencyListTest : DescribeSpec({
         it("must be unique pairs parent node id and self id in a adjacency list.") {
             val exception = shouldThrow<Exception> {
                 AdjacencyList.of(
-                    null to 1,
-                    1 to 11,
-                    1 to 11
-                ) { it }
+                    getSelfNodeId = { it },
+                    list = listOf(
+                        null to 1,
+                        1 to 11,
+                        1 to 11
+                    )
+                )
             }
             exception.message shouldBe "A pair selfNodeId and parentNodeId must be unique in a adjacency list."
         }
@@ -21,11 +24,14 @@ class AdjacencyListTest : DescribeSpec({
     describe("toTreeNode") {
         it("converts from adjacency list to tree node list") {
             val actual = AdjacencyList.of(
-                null to 1,
-                1 to 11,
-                11 to 111,
-                1 to 12
-            ) { it }.toTreeNode()
+                getSelfNodeId = { it },
+                list = listOf(
+                    null to 1,
+                    1 to 11,
+                    11 to 111,
+                    1 to 12
+                )
+            ).toTreeNode()
 
             val expected = listOf(
                 TreeNode(

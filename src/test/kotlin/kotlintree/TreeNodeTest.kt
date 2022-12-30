@@ -5,19 +5,53 @@ import io.kotest.matchers.shouldBe
 
 class TreeNodeTest : DescribeSpec({
     describe("foldTree") {
-        it("sum") {
-            val tree = AdjacencyList.of(
-                null to 1,
-                1 to 11,
-                11 to 111,
-                1 to 12
-            ) { it }.toTreeNode().first()
+        it("folds a tree node and returns flatten list") {
+            val tree = TreeNode(
+                1,
+                mutableListOf(
+                    TreeNode(
+                        11,
+                        mutableListOf(
+                            TreeNode(111, mutableListOf())
+                        )
+                    ),
+                    TreeNode(12, mutableListOf())
+                )
+            )
 
-            val actual = tree.foldTree(0) { acc, treeNode, currentIndexes ->
+            val actual = tree.foldTree(emptyList<Int>()) { acc, treeNode, _ ->
                 acc + treeNode.value
             }
 
-            actual shouldBe 135
+            actual shouldBe listOf(1, 11, 12, 111)
+        }
+
+        it("folds a tree node and returns indices list") {
+            val tree = TreeNode(
+                1,
+                mutableListOf(
+                    TreeNode(
+                        11,
+                        mutableListOf(
+                            TreeNode(111, mutableListOf())
+                        )
+                    ),
+                    TreeNode(12, mutableListOf())
+                )
+            )
+
+            // flatten
+            val actual = tree.foldTree(mutableListOf<List<Int>>()) { acc, _, currentIndices ->
+                acc.add(currentIndices)
+                acc
+            }.toList()
+
+            actual shouldBe listOf(
+                listOf(),
+                listOf(0),
+                listOf(1),
+                listOf(0, 0)
+            )
         }
     }
 
@@ -100,7 +134,7 @@ class TreeNodeTest : DescribeSpec({
                             TreeNode(111, mutableListOf())
                         )
                     ),
-                    TreeNode(12, mutableListOf()),
+                    TreeNode(12, mutableListOf())
                 )
             )
 
