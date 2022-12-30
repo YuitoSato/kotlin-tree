@@ -23,19 +23,19 @@ class AdjacencyList<ID, VALUE> private constructor(
             queue += root to emptyList()
 
             while (queue.isNotEmpty()) {
-                val (listItem, indexes) = queue.poll()
+                val (listItem, indices) = queue.poll()
                 val newTree = leafOf(listItem.value)
-                val level = indexes.size
+                val level = indices.size
                 if (level == 0) {
                     tree = newTree
                 } else {
-                    tree?.findSubTreeNodeByIndexes(indexes.take(indexes.size - 1))
+                    tree?.findSubTreeNodeByIndices(indices.take(indices.size - 1))
                         ?.children?.add(newTree)
                 }
                 val children = parentNodeIdToChildren.getOrDefault(listItem.selfNodeId, mutableListOf())
                 parentNodeIdToChildren.remove(listItem.selfNodeId)
                 children.withIndex().forEach { (index, child) ->
-                    queue += child to indexes.plus(index)
+                    queue += child to indices.plus(index)
                 }
             }
 

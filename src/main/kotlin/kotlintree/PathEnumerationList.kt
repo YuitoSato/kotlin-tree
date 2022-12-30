@@ -56,9 +56,9 @@ class PathEnumerationList<ID, VALUE> private constructor(
             treeNode: TreeNode<VALUE>
         ): PathEnumerationList<ID, VALUE> {
             val list =
-                treeNode.fold(emptyList<PathEnumerationListItem<ID, VALUE>>()) { acc, element, currentIndexes ->
-                    val path = (0..currentIndexes.size).mapNotNull { level ->
-                        treeNode.findSubTreeNodeByIndexes(currentIndexes.take(level))?.let { getNodeId(it.value) }
+                treeNode.fold(emptyList<PathEnumerationListItem<ID, VALUE>>()) { acc, element, currentIndices ->
+                    val path = (0..currentIndices.size).mapNotNull { level ->
+                        treeNode.findSubTreeNodeByIndices(currentIndices.take(level))?.let { getNodeId(it.value) }
                     }
                     acc.plus(
                         PathEnumerationListItem(
