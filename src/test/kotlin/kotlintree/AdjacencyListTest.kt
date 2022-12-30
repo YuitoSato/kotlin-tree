@@ -22,7 +22,7 @@ class AdjacencyListTest : DescribeSpec({
     }
 
     describe("toTreeNode") {
-        it("converts from adjacency list to tree node list") {
+        it("converts adjacency list to tree node list") {
             val actual = AdjacencyList.of(
                 getSelfNodeId = { it },
                 list = listOf(

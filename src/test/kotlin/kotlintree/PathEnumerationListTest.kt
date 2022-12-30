@@ -20,7 +20,7 @@ class PathEnumerationListTest : DescribeSpec({
     }
 
     describe("toTreeNode") {
-        it("converts from a tree node to a path enumeration list.") {
+        it("converts a tree node to a path enumeration list.") {
             val pathEnumerationList = PathEnumerationList.of(
                 PathEnumerationListItem(listOf(1, 11), 11),
                 PathEnumerationListItem(listOf(1), 1),
@@ -74,7 +74,7 @@ class PathEnumerationListTest : DescribeSpec({
     }
 
     describe("fromTreeNode") {
-        it("converts from a tree node to a path enumeration list") {
+        it("converts a tree node to a path enumeration list") {
             val treeNode = nodeOf(
                 1,
                 mutableListOf(
