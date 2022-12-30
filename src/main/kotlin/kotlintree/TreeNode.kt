@@ -73,10 +73,6 @@ class TreeNode<T> private constructor(
     companion object {
 
         fun <T> of(value: T, children: MutableList<TreeNode<T>>): TreeNode<T> = TreeNode(value, children)
-
-        fun <T> nodeOf(value: T, children: MutableList<TreeNode<T>>): TreeNode<T> = TreeNode(value, children)
-
-        fun <T> leafOf(value: T): TreeNode<T> = TreeNode(value, mutableListOf())
     }
 
     override fun equals(other: Any?): Boolean {
@@ -101,3 +97,7 @@ class TreeNode<T> private constructor(
         return "TreeNode($value, $children)"
     }
 }
+
+fun <T> nodeOf(value: T, children: MutableList<TreeNode<T>>): TreeNode<T> = TreeNode.of(value, children)
+
+fun <T> leafOf(value: T): TreeNode<T> = TreeNode.of(value, mutableListOf())

@@ -1,6 +1,5 @@
 package kotlintree
 
-import kotlintree.TreeNode.Companion.leafOf
 import java.util.LinkedList
 import java.util.Queue
 

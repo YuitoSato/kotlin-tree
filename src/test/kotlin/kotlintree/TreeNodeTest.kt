@@ -2,8 +2,6 @@ package kotlintree
 
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import kotlintree.TreeNode.Companion.leafOf
-import kotlintree.TreeNode.Companion.nodeOf
 
 class TreeNodeTest : DescribeSpec({
     describe("foldTree") {

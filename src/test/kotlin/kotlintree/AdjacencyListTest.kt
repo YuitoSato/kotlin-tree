@@ -3,8 +3,6 @@ package kotlintree
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import kotlintree.TreeNode.Companion.leafOf
-import kotlintree.TreeNode.Companion.nodeOf
 
 class AdjacencyListTest : DescribeSpec({
     describe("init") {

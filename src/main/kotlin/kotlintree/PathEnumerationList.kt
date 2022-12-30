@@ -1,7 +1,5 @@
 package kotlintree
 
-import kotlintree.TreeNode.Companion.leafOf
-
 class PathEnumerationList<ID, VALUE> private constructor(
     private val list: List<PathEnumerationListItem<ID, VALUE>>
 ) : List<PathEnumerationListItem<ID, VALUE>> by list {
