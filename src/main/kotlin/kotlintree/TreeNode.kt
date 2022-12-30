@@ -7,21 +7,17 @@ class TreeNode<T> private constructor(
     val value: T,
     val children: MutableList<TreeNode<T>>
 ) {
-    private data class FoldItem<T>(
-        val treeNode: TreeNode<T>,
-        val indices: List<Int>
-    )
 
     fun <S> foldTree(initial: S, f: (acc: S, treeNode: TreeNode<T>, currentIndices: List<Int>) -> S): S {
-        val queue: Queue<FoldItem<T>> = LinkedList()
-        queue += FoldItem(this, emptyList())
+        val nodeAndIndicesQueue: Queue<Pair<TreeNode<T>, List<Int>>> = LinkedList()
+        nodeAndIndicesQueue += this to emptyList()
         var acc = initial
 
-        while (queue.isNotEmpty()) {
-            val (treeNode, indices) = queue.poll()
+        while (nodeAndIndicesQueue.isNotEmpty()) {
+            val (treeNode, indices) = nodeAndIndicesQueue.poll()
             acc = f(acc, treeNode, indices)
             treeNode.children.withIndex()
-                .forEach { (index, childTreeNode) -> queue += FoldItem(childTreeNode, indices.plus(index)) }
+                .forEach { (index, childTreeNode) -> nodeAndIndicesQueue += childTreeNode to indices.plus(index) }
         }
 
         return acc
