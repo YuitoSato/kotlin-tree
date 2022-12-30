@@ -35,7 +35,7 @@ class TreeNode<T>(
             val level = currentIndexes.size
             if (level == 0) acc else {
                 val newTree = TreeNode(f(element), mutableListOf())
-                acc.findSubTreeByIndexes(currentIndexes.take(currentIndexes.size - 1))
+                acc.findSubTreeNodeByIndexes(currentIndexes.take(currentIndexes.size - 1))
                     ?.children?.add(newTree)
                 acc
             }
@@ -51,7 +51,7 @@ class TreeNode<T>(
                 !condition -> acc
                 acc == null -> newTree
                 else -> {
-                    acc.findSubTreeByIndexes(currentIndexes.take(currentIndexes.size - 1))
+                    acc.findSubTreeNodeByIndexes(currentIndexes.take(currentIndexes.size - 1))
                         ?.children?.add(newTree)
                     acc
                 }
@@ -59,7 +59,7 @@ class TreeNode<T>(
         }
     }
 
-    fun findSubTreeByIndexes(indexes: List<Int>): TreeNode<T>? {
+    fun findSubTreeNodeByIndexes(indexes: List<Int>): TreeNode<T>? {
         var current = this
         indexes.forEach { index ->
             val currentOpt = current.children.getOrNull(index)
