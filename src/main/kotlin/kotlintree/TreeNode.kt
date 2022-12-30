@@ -3,7 +3,7 @@ package kotlintree
 import java.util.LinkedList
 import java.util.Queue
 
-class TreeNode<T>(
+class TreeNode<T> private constructor(
     val value: T,
     val children: MutableList<TreeNode<T>>
 ) {
@@ -32,11 +32,11 @@ class TreeNode<T>(
     }
 
     fun <S> map(f: (T) -> S): TreeNode<S> {
-        val initial: TreeNode<S> = TreeNode(f(value), mutableListOf())
+        val initial: TreeNode<S> = leafOf(f(value))
         return fold(initial) { acc, element, currentIndexes ->
             val level = currentIndexes.size
             if (level == 0) acc else {
-                val newTree = TreeNode(f(element), mutableListOf())
+                val newTree = leafOf(f(element))
                 acc.findSubTreeNodeByIndexes(currentIndexes.take(currentIndexes.size - 1))
                     ?.children?.add(newTree)
                 acc
@@ -48,7 +48,7 @@ class TreeNode<T>(
         val initial: TreeNode<T>? = null
         return fold(initial) { acc, element, currentIndexes ->
             val condition = predicate(element)
-            val newTree = TreeNode(element, mutableListOf())
+            val newTree = leafOf(element)
             when {
                 !condition -> acc
                 acc == null -> newTree
@@ -68,6 +68,15 @@ class TreeNode<T>(
             current = currentOpt
         }
         return current
+    }
+
+    companion object {
+
+        fun <T> of(value: T, children: MutableList<TreeNode<T>>): TreeNode<T> = TreeNode(value, children)
+
+        fun <T> nodeOf(value: T, children: MutableList<TreeNode<T>>): TreeNode<T> = TreeNode(value, children)
+
+        fun <T> leafOf(value: T): TreeNode<T> = TreeNode(value, mutableListOf())
     }
 
     override fun equals(other: Any?): Boolean {

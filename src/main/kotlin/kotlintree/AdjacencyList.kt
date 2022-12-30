@@ -1,5 +1,6 @@
 package kotlintree
 
+import kotlintree.TreeNode.Companion.leafOf
 import java.util.LinkedList
 import java.util.Queue
 
@@ -23,7 +24,7 @@ class AdjacencyList<ID, VALUE> private constructor(
 
             while (queue.isNotEmpty()) {
                 val (listItem, indexes) = queue.poll()
-                val newTree = TreeNode(listItem.value, mutableListOf())
+                val newTree = leafOf(listItem.value)
                 val level = indexes.size
                 if (level == 0) {
                     tree = newTree

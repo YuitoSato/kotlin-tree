@@ -2,20 +2,22 @@ package kotlintree
 
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import kotlintree.TreeNode.Companion.leafOf
+import kotlintree.TreeNode.Companion.nodeOf
 
 class TreeNodeTest : DescribeSpec({
     describe("foldTree") {
         it("folds a tree node and returns flatten list") {
-            val tree = TreeNode(
+            val tree = nodeOf(
                 1,
                 mutableListOf(
-                    TreeNode(
+                    nodeOf(
                         11,
                         mutableListOf(
-                            TreeNode(111, mutableListOf())
+                            leafOf(111)
                         )
                     ),
-                    TreeNode(12, mutableListOf())
+                    leafOf(12)
                 )
             )
 
@@ -27,16 +29,16 @@ class TreeNodeTest : DescribeSpec({
         }
 
         it("folds a tree node and returns indices list") {
-            val tree = TreeNode(
+            val tree = nodeOf(
                 1,
                 mutableListOf(
-                    TreeNode(
+                    nodeOf(
                         11,
                         mutableListOf(
-                            TreeNode(111, mutableListOf())
+                            leafOf(111)
                         )
                     ),
-                    TreeNode(12, mutableListOf())
+                    leafOf(12)
                 )
             )
 
@@ -57,31 +59,31 @@ class TreeNodeTest : DescribeSpec({
 
     describe("map") {
         it("applies function to each values in tree node") {
-            val tree = TreeNode(
+            val tree = nodeOf(
                 1,
                 mutableListOf(
-                    TreeNode(
+                    nodeOf(
                         11,
                         mutableListOf(
-                            TreeNode(111, mutableListOf())
+                            leafOf(111)
                         )
                     ),
-                    TreeNode(12, mutableListOf())
+                    leafOf(12)
                 )
             )
 
             val actual = tree.map { it * 2 }
 
-            val expected = TreeNode(
+            val expected = nodeOf(
                 2,
                 mutableListOf(
-                    TreeNode(
+                    nodeOf(
                         22,
                         mutableListOf(
-                            TreeNode(222, mutableListOf())
+                            leafOf(222)
                         )
                     ),
-                    TreeNode(24, mutableListOf())
+                    leafOf(24)
                 )
             )
 
@@ -91,33 +93,30 @@ class TreeNodeTest : DescribeSpec({
 
     describe("filter") {
         it("filters a tree node that matches a condition.") {
-            val tree = TreeNode(
+            val tree = nodeOf(
                 1,
                 mutableListOf(
-                    TreeNode(
+                    nodeOf(
                         11,
                         mutableListOf(
-                            TreeNode(111, mutableListOf())
+                            leafOf(111)
                         )
                     ),
-                    TreeNode(12, mutableListOf()),
-                    TreeNode(13, mutableListOf())
+                    leafOf(12),
+                    leafOf(13)
                 )
             )
 
             val actual = tree.filter { it <= 12 }
 
-            val expected = TreeNode(
+            val expected = nodeOf(
                 1,
                 mutableListOf(
-                    TreeNode(
+                    nodeOf(
                         11,
                         mutableListOf()
                     ),
-                    TreeNode(
-                        12,
-                        mutableListOf()
-                    )
+                    leafOf(12)
                 )
             )
 
@@ -125,16 +124,16 @@ class TreeNodeTest : DescribeSpec({
         }
 
         it("returns null if the top of the tree node does not match a condition.") {
-            val tree = TreeNode(
+            val tree = nodeOf(
                 1,
                 mutableListOf(
-                    TreeNode(
+                    nodeOf(
                         11,
                         mutableListOf(
-                            TreeNode(111, mutableListOf())
+                            leafOf(111)
                         )
                     ),
-                    TreeNode(12, mutableListOf())
+                    leafOf(12)
                 )
             )
 

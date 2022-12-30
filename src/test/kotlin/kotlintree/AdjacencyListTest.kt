@@ -3,6 +3,8 @@ package kotlintree
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import kotlintree.TreeNode.Companion.leafOf
+import kotlintree.TreeNode.Companion.nodeOf
 
 class AdjacencyListTest : DescribeSpec({
     describe("init") {
@@ -34,16 +36,14 @@ class AdjacencyListTest : DescribeSpec({
             ).toTreeNode()
 
             val expected = listOf(
-                TreeNode(
+                nodeOf(
                     1,
                     mutableListOf(
-                        TreeNode(
+                        nodeOf(
                             11,
-                            mutableListOf(
-                                TreeNode(111, mutableListOf())
-                            )
+                            mutableListOf(leafOf(111))
                         ),
-                        TreeNode(12, mutableListOf())
+                        leafOf(12)
                     )
                 )
             )

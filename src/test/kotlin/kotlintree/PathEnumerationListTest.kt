@@ -3,6 +3,8 @@ package kotlintree
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import kotlintree.TreeNode.Companion.leafOf
+import kotlintree.TreeNode.Companion.nodeOf
 
 class PathEnumerationListTest : DescribeSpec({
 
@@ -36,31 +38,28 @@ class PathEnumerationListTest : DescribeSpec({
             val actual = pathEnumerationList.toTreeNode()
 
             val expectedTreeNodes = listOf(
-                TreeNode(
+                nodeOf(
                     1,
                     mutableListOf(
-                        TreeNode(
+                        nodeOf(
                             11,
                             mutableListOf(
-                                TreeNode(111, mutableListOf())
+                                leafOf(111)
                             )
                         ),
-                        TreeNode(12, mutableListOf())
+                        leafOf(12)
                     )
                 ),
-                TreeNode(
+                nodeOf(
                     2,
                     mutableListOf(
-                        TreeNode(
+                        nodeOf(
                             11,
                             mutableListOf(
-                                TreeNode(211, mutableListOf())
+                                leafOf(211)
                             )
                         ),
-                        TreeNode(
-                            111,
-                            mutableListOf()
-                        )
+                        leafOf(111)
                     )
                 )
             )
@@ -78,16 +77,16 @@ class PathEnumerationListTest : DescribeSpec({
 
     describe("fromTreeNode") {
         it("converts from a tree node to a path enumeration list") {
-            val treeNode = TreeNode(
+            val treeNode = nodeOf(
                 1,
                 mutableListOf(
-                    TreeNode(
+                    nodeOf(
                         11,
                         mutableListOf(
-                            TreeNode(111, mutableListOf())
+                            leafOf(111)
                         )
                     ),
-                    TreeNode(12, mutableListOf())
+                    leafOf(12)
                 )
             )
 

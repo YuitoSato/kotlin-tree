@@ -1,5 +1,7 @@
 package kotlintree
 
+import kotlintree.TreeNode.Companion.leafOf
+
 class PathEnumerationList<ID, VALUE> private constructor(
     private val list: List<PathEnumerationListItem<ID, VALUE>>
 ) : List<PathEnumerationListItem<ID, VALUE>> by list {
@@ -23,7 +25,7 @@ class PathEnumerationList<ID, VALUE> private constructor(
         this.sortedBy { it.getLevel() }.forEach { listItem ->
             val level = listItem.getLevel()
             if (level == 0) {
-                val treeNode = TreeNode(listItem.value, mutableListOf())
+                val treeNode = leafOf(listItem.value)
                 rootTreeNodes.add(treeNode)
                 pathToTreeNodeMap[listItem.path] = treeNode
             } else {
@@ -32,7 +34,7 @@ class PathEnumerationList<ID, VALUE> private constructor(
                 if (parentTreeNode == null) {
                     parentNodeNotFoundList.add(listItem)
                 }
-                val treeNode = TreeNode(listItem.value, mutableListOf())
+                val treeNode = leafOf(listItem.value)
                 parentTreeNode?.children?.add(treeNode)
                 pathToTreeNodeMap[listItem.path] = treeNode
             }
