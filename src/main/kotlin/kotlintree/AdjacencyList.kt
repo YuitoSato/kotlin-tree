@@ -6,6 +6,12 @@ class AdjacencyList<ID, VALUE> private constructor(
     private val list: List<AdjacencyListItem<ID, VALUE>>
 ) : List<AdjacencyListItem<ID, VALUE>> by list {
 
+    init {
+        require(list.size == list.distinctBy { it.parentNodeId to it.selfNodeId }.size) {
+            throw Exception("A pair selfNodeId and parentNodeId must be unique in a adjacency list.")
+        }
+    }
+
     fun toTreeNode(): List<TreeNode<VALUE>> {
         val parentNodeIdToChildren = list.groupBy { it.parentNodeId }.toMutableMap()
 
@@ -21,7 +27,7 @@ class AdjacencyList<ID, VALUE> private constructor(
                 if (level == 0) {
                     tree = newTree
                 } else {
-                    tree?.findSubTreeByIndexes(indexes.take(indexes.size - 1))
+                    tree?.findSubTreeNodeByIndexes(indexes.take(indexes.size - 1))
                         ?.children?.add(newTree)
                 }
                 val children = parentNodeIdToChildren.getOrDefault(listItem.selfNodeId, mutableListOf())
@@ -53,6 +59,12 @@ class AdjacencyList<ID, VALUE> private constructor(
                 }
             )
     }
+
+    override fun hashCode() = this.list.hashCode()
+
+    override fun equals(other: Any?) = this.list == other
+
+    override fun toString() = this.list.toString()
 }
 
 data class AdjacencyListItem<ID, VALUE>(

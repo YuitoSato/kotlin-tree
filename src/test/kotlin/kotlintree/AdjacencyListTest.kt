@@ -1,9 +1,23 @@
 package kotlintree
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
 class AdjacencyListTest : DescribeSpec({
+    describe("init") {
+        it("must be unique pairs parent node id and self id in a adjacency list.") {
+            val exception = shouldThrow<Exception> {
+                AdjacencyList.of(
+                    null to 1,
+                    1 to 11,
+                    1 to 11
+                ) { it }
+            }
+            exception.message shouldBe "A pair selfNodeId and parentNodeId must be unique in a adjacency list."
+        }
+    }
+
     describe("toTreeNode") {
         it("converts from adjacency list to tree node list") {
             val actual = AdjacencyList.of(
