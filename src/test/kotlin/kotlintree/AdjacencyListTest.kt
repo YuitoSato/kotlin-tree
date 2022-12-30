@@ -29,7 +29,8 @@ class AdjacencyListTest : DescribeSpec({
                     null to 1,
                     1 to 11,
                     11 to 111,
-                    1 to 12
+                    1 to 12,
+                    2 to 21 // parentNodeId is not found
                 )
             ).toTreeNode()
 
@@ -46,7 +47,10 @@ class AdjacencyListTest : DescribeSpec({
                 )
             )
 
-            actual shouldBe expected
+            actual.treeNodes shouldBe expected
+            actual.parentNodeNotFoundList shouldBe AdjacencyList.of(
+                AdjacencyListItem(2, 21, 21)
+            )
         }
     }
 })

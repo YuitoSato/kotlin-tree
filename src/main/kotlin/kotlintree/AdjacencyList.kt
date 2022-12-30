@@ -13,7 +13,12 @@ class AdjacencyList<ID, VALUE> private constructor(
         }
     }
 
-    fun toTreeNode(): List<TreeNode<VALUE>> {
+    data class AdjacencyListToTreeNodeParseResult<ID, VALUE>(
+        val treeNodes: List<TreeNode<VALUE>>,
+        val parentNodeNotFoundList: AdjacencyList<ID, VALUE>
+    )
+
+    fun toTreeNode(): AdjacencyListToTreeNodeParseResult<ID, VALUE> {
         val parentNodeIdToChildren = list.groupBy { it.parentNodeId }.toMutableMap()
 
         fun buildTree(root: AdjacencyListItem<ID, VALUE>): TreeNode<VALUE>? {
@@ -43,10 +48,21 @@ class AdjacencyList<ID, VALUE> private constructor(
 
         val rootElements = parentNodeIdToChildren[null] ?: listOf()
         parentNodeIdToChildren.remove(null)
-        return rootElements.mapNotNull { root -> buildTree(root) }
+        val resultTreeNodes = rootElements.mapNotNull { root -> buildTree(root) }
+        val parentNodeNotFoundList = of(parentNodeIdToChildren.values.flatten())
+
+        return AdjacencyListToTreeNodeParseResult(
+            resultTreeNodes,
+            parentNodeNotFoundList
+        )
     }
 
     companion object {
+
+        fun <ID, VALUE> of(list: List<AdjacencyListItem<ID, VALUE>>) = AdjacencyList(list)
+
+        fun <ID, VALUE> of(vararg list: AdjacencyListItem<ID, VALUE>) = AdjacencyList(list.toList())
+
         fun <ID, VALUE> of(getSelfNodeId: (VALUE) -> ID, list: List<Pair<ID?, VALUE>>) =
             AdjacencyList(
                 list.map { (parentNodeId, value) ->
