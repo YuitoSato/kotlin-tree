@@ -8,8 +8,53 @@ Easy to convert trees to other tree models, Path Enumeration Models and Adjacenc
 
 This library is in preparation for release.
 
-## Quick Start
+## Definition 
 
+The base class TreeNode is defined as follows.
+
+TreeNode has the value property, which is the content of the node, and the children property, which is the node's child nodes.
+
+```kt
+class TreeNode<T> private constructor(
+    val value: T,
+    val children: MutableList<TreeNode<T>>
+)
+```
+
+
+
+## Quick Start
+You can create a tree node instance and operate the tree node's contents easily and simply.
+```kt
+val treeNode: TreeNode<Int> = nodeOf(
+    1,
+    mutableListOf(
+        nodeOf(
+            11,
+            mutableList(
+                leafOf(111),
+                leafOf(112)
+            )
+        ),
+        leafOf(12)
+    )
+)
+// 1
+// ├── 11
+// │   ├── 111
+// │   └── 112
+// └── 12
+
+treeNode.map { ele -> ele * 2 }
+// 2
+// ├── 22
+// │   ├── 222
+// │   └── 224
+// └── 24
+```
+
+## Examples
+### Tree Operations 
 ```kt
 val treeNode: TreeNode<Int> = nodeOf(
     1,
@@ -52,11 +97,10 @@ treeNode.forEach { ele -> println(ele) }
 // => 111
 // => 112
 // => 12
+
 ```
 
-## Examples
-
-### Adjacency Models <-> Trees
+### Adjacency Models -> Trees Conversions
 
 ```kt
 // Adjacency Models -> Trees
@@ -85,6 +129,8 @@ val (treeNodes, parentNodeNotFoundList) = adjacencyList.toTreeNode()
 // (parentNodeId: 3, selfNodeId: 31)
 ```
 
+### Trees -> Adjacency Models Conversions
+
 ```kt
 // Trees -> Adjacency Models
 val treeNode = nodeOf(
@@ -110,7 +156,7 @@ val adjacencyList = AdjacencyList.fromTreeNode(
 // (1, 12)
 ```
 
-### PathEnumeration Models <-> Trees
+### PathEnumeration Models -> Trees Conversions
 
 ```kt
 // PathEnumeration Models -> Trees
@@ -138,6 +184,7 @@ val (treeNodes, parentNodeNotFoundList) =
 // (path: 3/31, value: 31)
 ```
 
+### Trees -> PathEnumeration Models Conversions 
 ```kt
 // Trees -> PathEnumeration Models
 val treeNode = nodeOf(
@@ -161,3 +208,7 @@ val pathEnumerationList = PathEnumerationList.fromTreeNode(treeNode)
 // (1/12, 12)
 ```
 
+# 📝 License
+Copyright © 2023 YuitoSato.
+
+This project is licensed under Apache 2.0.
