@@ -44,8 +44,8 @@ class TreeNodeTest : DescribeSpec({
             )
 
             // flatten
-            val actual = tree.foldNode(mutableListOf<List<Int>>()) { acc, _, currentIndices ->
-                acc.add(currentIndices)
+            val actual = tree.foldNode(mutableListOf<List<Int>>()) { acc, _, indices ->
+                acc.add(indices)
                 acc
             }.toList()
 
@@ -208,7 +208,7 @@ class TreeNodeTest : DescribeSpec({
         }
     }
 
-    describe("filterByNodeCondition") {
+    describe("filterNode") {
         it("filters a tree node that matches a condition") {
             val tree = nodeOf(
                 1,
@@ -224,7 +224,7 @@ class TreeNodeTest : DescribeSpec({
                 )
             )
 
-            val actual = tree.filterByNodeCondition { treeNode ->
+            val actual = tree.filterNode { treeNode ->
                 treeNode.find { it == 111 } != null
             }
 
@@ -257,7 +257,7 @@ class TreeNodeTest : DescribeSpec({
                 )
             )
 
-            val actual = tree.filterByNodeCondition { it.value < 1 }
+            val actual = tree.filterNode { it.value < 1 }
 
             actual shouldBe null
         }
@@ -296,7 +296,7 @@ class TreeNodeTest : DescribeSpec({
         }
     }
 
-    describe("findByNodeCondition") {
+    describe("findNode") {
         it("find a tree node that matches the condition") {
             val tree = nodeOf(
                 1,
@@ -312,7 +312,7 @@ class TreeNodeTest : DescribeSpec({
                 )
             )
 
-            val actual = tree.findByNodeCondition { treeNode ->
+            val actual = tree.findNode { treeNode ->
                 treeNode.find { it == 111 } != null
             }
 
@@ -347,7 +347,7 @@ class TreeNodeTest : DescribeSpec({
                 )
             )
 
-            val actual = tree.findByNodeCondition { it.value == 999 }
+            val actual = tree.findNode { it.value == 999 }
 
             actual shouldBe null
         }

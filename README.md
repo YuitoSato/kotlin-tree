@@ -8,11 +8,12 @@ Easy to convert trees to other tree models, Path Enumeration Models and Adjacenc
 
 This library is in preparation for release.
 
-## Definition 
+## Definition
 
 The base class TreeNode is defined as follows.
 
-TreeNode has the value property, which is the content of the node, and the children property, which is the node's child nodes.
+TreeNode has the value property, which is the content of the node, and the children property, which is the node's child
+nodes.
 
 ```kt
 class TreeNode<T> private constructor(
@@ -21,10 +22,10 @@ class TreeNode<T> private constructor(
 )
 ```
 
-
-
 ## Quick Start
-You can create a tree node instance and operate the tree node's contents easily and simply.
+
+You can create a tree node instance and operate the contents of nodes easily and simply.
+
 ```kt
 val treeNode: TreeNode<Int> = nodeOf(
     1,
@@ -54,7 +55,14 @@ treeNode.map { ele -> ele * 2 }
 ```
 
 ## Examples
-### Tree Operations 
+
+### Tree Operations
+
+kotlin-tree provides APIs that operates the contents of nodes like Kotlin Collection APIs such as map, filter, etc.
+Also, kotlin-tree provides APIs that operates the nodes themselves. (It means lambda blocks receive TreeNode instances,
+not the contents of nodes T.)
+These methods are named xxxNode, mapNode, filterNode, etc.
+
 ```kt
 val treeNode: TreeNode<Int> = nodeOf(
     1,
@@ -76,6 +84,7 @@ val treeNode: TreeNode<Int> = nodeOf(
 // └── 12
 
 treeNode.map { ele -> ele * 2 }
+treeNode.mapNode { node -> node.value * 2 }
 // 2
 // ├── 22
 // │   ├── 222
@@ -83,27 +92,35 @@ treeNode.map { ele -> ele * 2 }
 // └── 24
 
 treeNode.filter { ele -> ele % 2 != 0 }
+treeNode.filterNode { node -> node.value % 2 != 0 }
 // 1
 // └── 11
 //     └── 111
 
 treeNode.find { ele -> ele == 11 }
+treeNode.findNode { node -> node.value == 11 }
 // 11
 // └── 111
 
 treeNode.forEach { ele -> println(ele) }
+treeNode.forEachNode { node -> println(node.value) }
 // => 1
 // => 11
 // => 111
 // => 112
 // => 12
 
+treeNode.fold(0) { (acc, ele, indices) -> acc + ele }
+treeNode.foldNode(0) { (acc, node, indices) -> node.value + ele }
+// (1 + 11 + 111 + 112 + 12)
+
+treeNode.getOrElse(listOf(0, 1))
+// => leafOf(112)
 ```
 
 ### Adjacency Models -> Trees Conversions
 
 ```kt
-// Adjacency Models -> Trees
 val adjacencyList = AdjacencyList.of(
     getSelfNodeId = { it },
     list = listOf(
@@ -132,7 +149,6 @@ val (treeNodes, parentNodeNotFoundList) = adjacencyList.toTreeNode()
 ### Trees -> Adjacency Models Conversions
 
 ```kt
-// Trees -> Adjacency Models
 val treeNode = nodeOf(
     1,
     mutableListOf(
@@ -159,7 +175,6 @@ val adjacencyList = AdjacencyList.fromTreeNode(
 ### PathEnumeration Models -> Trees Conversions
 
 ```kt
-// PathEnumeration Models -> Trees
 val pathEnumerationList = PathEnumerationList.of(
     listOf(1) to 1,
     listOf(1, 11) to 11,
@@ -167,8 +182,7 @@ val pathEnumerationList = PathEnumerationList.of(
     listOf(1, 12) to 12,
     listOf(2) to 2,
     listOf(2, 21) to 21,
-    listOf(3, 31) to 31,
-    // the path is not found
+    listOf(3, 31) to 31, // the path is not found
 )
 val (treeNodes, parentNodeNotFoundList) =
     pathEnumerationList.toTreeNode()
@@ -184,9 +198,9 @@ val (treeNodes, parentNodeNotFoundList) =
 // (path: 3/31, value: 31)
 ```
 
-### Trees -> PathEnumeration Models Conversions 
+### Trees -> PathEnumeration Models Conversions
+
 ```kt
-// Trees -> PathEnumeration Models
 val treeNode = nodeOf(
     1,
     mutableListOf(
@@ -209,6 +223,7 @@ val pathEnumerationList = PathEnumerationList.fromTreeNode(treeNode)
 ```
 
 # 📝 License
+
 Copyright © 2023 YuitoSato.
 
 This project is licensed under Apache 2.0.
