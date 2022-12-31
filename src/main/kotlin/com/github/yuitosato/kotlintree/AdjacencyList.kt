@@ -1,4 +1,4 @@
-package kotlintree
+package com.github.yuitosato.kotlintree
 
 import java.util.Stack
 
