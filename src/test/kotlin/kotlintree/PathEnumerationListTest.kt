@@ -25,11 +25,11 @@ class PathEnumerationListTest : DescribeSpec({
                 listOf(1, 11) to 11,
                 listOf(1) to 1,
                 listOf(2) to 2,
-                listOf(1, 11, 111) to 11,
-                listOf(1, 12) to 2,
-                listOf(2, 11) to 1, // duplicated
+                listOf(1, 11, 111) to 111,
+                listOf(1, 12) to 12,
+                listOf(2, 11) to 11, // duplicated
                 listOf(2, 11, 211) to 211, // duplicated
-                listOf(2, 111) to 11, // duplicated
+                listOf(2, 111) to 111, // duplicated
                 listOf(1, 99, 999) to 999, // a parent node is not found
                 listOf(0, 11, 999) to 999 // a parent node is not found
             )
