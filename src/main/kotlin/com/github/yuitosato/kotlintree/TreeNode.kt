@@ -13,9 +13,9 @@ class TreeNode<T> private constructor(
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
      *
-     * The "currentIndices" argument of the [operation] is the location of the node currently being processed.
+     * The "indices" argument of the [operation] is the location of the node currently being processed.
      */
-    fun <S> foldNode(initial: S, operation: (acc: S, treeNode: TreeNode<T>, currentIndices: List<Int>) -> S): S {
+    fun <S> foldNode(initial: S, operation: (acc: S, treeNode: TreeNode<T>, indices: List<Int>) -> S): S {
         val nodeAndIndicesStack: Stack<Pair<TreeNode<T>, List<Int>>> = Stack()
         nodeAndIndicesStack += this to emptyList()
         var acc = initial
@@ -33,10 +33,10 @@ class TreeNode<T> private constructor(
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each element by depth-first-search.
      *
-     * The "currentIndices" argument of the [operation] is the location of the node currently being processed.
+     * The "indices" argument of the [operation] is the location of the node currently being processed.
      */
-    fun <S> fold(initial: S, operation: (acc: S, element: T, currentIndices: List<Int>) -> S): S {
-        return foldNode(initial) { acc, treeNode, currentIndices -> operation(acc, treeNode.value, currentIndices) }
+    fun <S> fold(initial: S, operation: (acc: S, element: T, indices: List<Int>) -> S): S {
+        return foldNode(initial) { acc, treeNode, indices -> operation(acc, treeNode.value, indices) }
     }
 
     /**
@@ -45,11 +45,11 @@ class TreeNode<T> private constructor(
      */
     fun <S> mapNode(transform: (TreeNode<T>) -> S): TreeNode<S> {
         val initial: TreeNode<S> = leafOf(transform(this))
-        return foldNode(initial) { acc, treeNode, currentIndices ->
-            val level = currentIndices.size
+        return foldNode(initial) { acc, treeNode, indices ->
+            val level = indices.size
             if (level == 0) acc else {
                 val newTreeNode = leafOf(transform(treeNode))
-                acc.getOrNull(currentIndices.take(currentIndices.size - 1))
+                acc.getOrNull(indices.take(indices.size - 1))
                     ?.children?.add(newTreeNode)
                 acc
             }
@@ -77,16 +77,16 @@ class TreeNode<T> private constructor(
     /**
      * Returns a tree node containing only tree nodes matching the given [predicate].
      */
-    fun filterByNodeCondition(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>? {
+    fun filterNode(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>? {
         val initial: TreeNode<T>? = null
-        return foldNode(initial) { acc, treeNode, currentIndices ->
+        return foldNode(initial) { acc, treeNode, indices ->
             val condition = predicate(treeNode)
             val newTreeNode = leafOf(treeNode.value)
             when {
                 !condition -> acc
                 acc == null -> newTreeNode
                 else -> {
-                    acc.getOrNull(currentIndices.take(currentIndices.size - 1))
+                    acc.getOrNull(indices.take(indices.size - 1))
                         ?.children?.add(newTreeNode)
                     acc
                 }
@@ -98,12 +98,12 @@ class TreeNode<T> private constructor(
      * Returns a tree node containing only elements matching the given [predicate].
      */
     fun filter(predicate: (T) -> Boolean): TreeNode<T>? =
-        filterByNodeCondition { treeNode -> predicate(treeNode.value) }
+        filterNode { treeNode -> predicate(treeNode.value) }
 
     /**
      * Returns a tree node containing only tree nodes matching the given [predicate].
      */
-    fun findByNodeCondition(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>? {
+    fun findNode(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>? {
         var resultTreeNode: TreeNode<T>? = null
         this.forEachNode { treeNode ->
             if (predicate(treeNode) && resultTreeNode == null) {
@@ -116,7 +116,7 @@ class TreeNode<T> private constructor(
     /**
      * Returns a tree node containing only elements matching the given [predicate].
      */
-    fun find(predicate: (T) -> Boolean): TreeNode<T>? = findByNodeCondition { treeNode -> predicate(treeNode.value) }
+    fun find(predicate: (T) -> Boolean): TreeNode<T>? = findNode { treeNode -> predicate(treeNode.value) }
 
     /**
      * Returns a tree node at the given [indices] or `null` if the [indices] is out of bounds of this tree node.
