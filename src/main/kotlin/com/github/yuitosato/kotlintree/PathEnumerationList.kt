@@ -1,5 +1,9 @@
 package com.github.yuitosato.kotlintree
 
+/**
+ * Class for Path Enumeration Model.
+ * Paths in a path enumeration list must be unique.
+ */
 class PathEnumerationList<ID, VALUE> private constructor(
     private val list: List<PathEnumerationListItem<ID, VALUE>>
 ) : List<PathEnumerationListItem<ID, VALUE>> by list {
@@ -15,6 +19,10 @@ class PathEnumerationList<ID, VALUE> private constructor(
         val parentNodeNotFoundList: PathEnumerationList<ID, VALUE>
     )
 
+    /**
+     * Converts a path enumeration list to tree nodes.
+     * The result contains tree nodes and a list of parent node not found
+     */
     fun toTreeNode(): PathEnumerationListToTreeNodeParseResult<ID, VALUE> {
         val pathToTreeNodeMap = mutableMapOf<List<ID>, TreeNode<VALUE>>()
         val rootTreeNodes = mutableListOf<TreeNode<VALUE>>()
@@ -51,6 +59,9 @@ class PathEnumerationList<ID, VALUE> private constructor(
         fun <ID, VALUE> of(vararg list: Pair<List<ID>, VALUE>): PathEnumerationList<ID, VALUE> =
             of(list.map { PathEnumerationListItem.of(it.first, it.second) })
 
+        /**
+         * Converts a tree node to a path enumeration list.
+         */
         fun <ID, VALUE> fromTreeNode(
             getNodeId: (VALUE) -> ID,
             treeNode: TreeNode<VALUE>
@@ -79,6 +90,10 @@ class PathEnumerationList<ID, VALUE> private constructor(
     override fun toString() = this.list.toString()
 }
 
+/**
+ * Class for a item in a path enumeration list.
+ * A path in a path enumeration list item must not be empty.
+ */
 data class PathEnumerationListItem<ID, VALUE>(
     val path: List<ID>,
     val value: VALUE
@@ -88,14 +103,23 @@ data class PathEnumerationListItem<ID, VALUE>(
         require(path.isNotEmpty()) { throw Exception("A path in a path enumeration list item must not be empty.") }
     }
 
+    /**
+     * Returns a parent node id.
+     */
     fun getParentNodeId(): ID? {
         return path.getOrNull(path.lastIndex - 1)
     }
 
+    /**
+     * Returns a parent node path.
+     */
     fun getParentNodePath(): List<ID> {
         return path.take(path.size - 1)
     }
 
+    /**
+     * Returns zero-based level.
+     */
     fun getLevel(): Int { // zero-based level
         return path.size - 1
     }

@@ -2,6 +2,10 @@ package com.github.yuitosato.kotlintree
 
 import java.util.Stack
 
+/**
+ * Class for Adjacency Model.
+ * A pair parent node id and self node id in an adjacency list must be unique.
+ */
 class AdjacencyList<ID, VALUE> private constructor(
     private val list: List<AdjacencyListItem<ID, VALUE>>
 ) : List<AdjacencyListItem<ID, VALUE>> by list {
@@ -17,6 +21,10 @@ class AdjacencyList<ID, VALUE> private constructor(
         val parentNodeNotFoundList: AdjacencyList<ID, VALUE>
     )
 
+    /**
+     * Converts an adjacency list to tree nodes.
+     * The result contains tree nodes and a list of parent node not found
+     */
     fun toTreeNode(): AdjacencyListToTreeNodeParseResult<ID, VALUE> {
         val parentNodeIdToChildren = list.groupBy { it.parentNodeId }.toMutableMap()
 
@@ -70,6 +78,9 @@ class AdjacencyList<ID, VALUE> private constructor(
                 }
             )
 
+        /**
+         * Converts a tree node to an adjacency list.
+         */
         fun <ID, VALUE> fromTreeNode(
             getSelfNodeId: (VALUE) -> ID,
             treeNode: TreeNode<VALUE>
