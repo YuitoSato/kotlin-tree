@@ -99,4 +99,8 @@ data class PathEnumerationListItem<ID, VALUE>(
     fun getLevel(): Int { // zero-based level
         return path.size - 1
     }
+
+    companion object {
+        fun <ID, VALUE> of(path: List<ID>, value: VALUE) = PathEnumerationListItem(path, value)
+    }
 }

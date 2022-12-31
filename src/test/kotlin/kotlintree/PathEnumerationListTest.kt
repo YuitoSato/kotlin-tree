@@ -96,8 +96,8 @@ class PathEnumerationListTest : DescribeSpec({
             val expected = PathEnumerationList.of(
                 PathEnumerationListItem(listOf(1), 1),
                 PathEnumerationListItem(listOf(1, 11), 11),
-                PathEnumerationListItem(listOf(1, 12), 12),
-                PathEnumerationListItem(listOf(1, 11, 111), 111)
+                PathEnumerationListItem(listOf(1, 11, 111), 111),
+                PathEnumerationListItem(listOf(1, 12), 12)
             )
 
             actual shouldBe expected

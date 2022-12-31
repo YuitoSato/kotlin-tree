@@ -23,7 +23,7 @@ class TreeNodeTest : DescribeSpec({
                 acc + treeNode.value
             }
 
-            actual shouldBe listOf(1, 11, 12, 111)
+            actual shouldBe listOf(1, 11, 111, 12)
         }
 
         it("folds a tree node and returns indices list") {
@@ -49,8 +49,8 @@ class TreeNodeTest : DescribeSpec({
             actual shouldBe listOf(
                 listOf(),
                 listOf(0),
-                listOf(1),
-                listOf(0, 0)
+                listOf(0, 0),
+                listOf(1)
             )
         }
     }

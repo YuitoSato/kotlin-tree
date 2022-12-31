@@ -73,8 +73,8 @@ class AdjacencyListTest : DescribeSpec({
                 listOf(
                     null to 1,
                     1 to 11,
+                    11 to 111,
                     1 to 12,
-                    11 to 111
                 )
             )
         }

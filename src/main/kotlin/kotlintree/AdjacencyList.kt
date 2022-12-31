@@ -1,7 +1,6 @@
 package kotlintree
 
-import java.util.LinkedList
-import java.util.Queue
+import java.util.Stack
 
 class AdjacencyList<ID, VALUE> private constructor(
     private val list: List<AdjacencyListItem<ID, VALUE>>
@@ -23,11 +22,11 @@ class AdjacencyList<ID, VALUE> private constructor(
 
         fun buildTree(root: AdjacencyListItem<ID, VALUE>): TreeNode<VALUE>? {
             var tree: TreeNode<VALUE>? = null
-            val queue: Queue<Pair<AdjacencyListItem<ID, VALUE>, List<Int>>> = LinkedList()
-            queue += root to emptyList()
+            val itemAndIndicesStack: Stack<Pair<AdjacencyListItem<ID, VALUE>, List<Int>>> = Stack()
+            itemAndIndicesStack += root to emptyList()
 
-            while (queue.isNotEmpty()) {
-                val (listItem, indices) = queue.poll()
+            while (itemAndIndicesStack.isNotEmpty()) {
+                val (listItem, indices) = itemAndIndicesStack.pop()
                 val newTree = leafOf(listItem.value)
                 val level = indices.size
                 if (level == 0) {
@@ -37,8 +36,8 @@ class AdjacencyList<ID, VALUE> private constructor(
                 }
                 val children = parentNodeIdToChildren.getOrDefault(listItem.selfNodeId, mutableListOf())
                 parentNodeIdToChildren.remove(listItem.selfNodeId)
-                children.withIndex().forEach { (index, child) ->
-                    queue += child to indices.plus(index)
+                children.withIndex().reversed().forEach { (index, child) ->
+                    itemAndIndicesStack += child to indices.plus(index)
                 }
             }
 
@@ -105,4 +104,13 @@ data class AdjacencyListItem<ID, VALUE>(
     val parentNodeId: ID?,
     val selfNodeId: ID?,
     val value: VALUE
-)
+) {
+
+    companion object {
+        fun <ID, VALUE> of(
+            parentNodeId: ID?,
+            selfNodeId: ID?,
+            value: VALUE
+        ) = AdjacencyListItem(parentNodeId, selfNodeId, value)
+    }
+}

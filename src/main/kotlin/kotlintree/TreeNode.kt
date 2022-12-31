@@ -1,7 +1,6 @@
 package kotlintree
 
-import java.util.LinkedList
-import java.util.Queue
+import java.util.Stack
 
 class TreeNode<T> private constructor(
     val value: T,
@@ -9,15 +8,15 @@ class TreeNode<T> private constructor(
 ) {
 
     fun <S> foldTree(initial: S, f: (acc: S, treeNode: TreeNode<T>, currentIndices: List<Int>) -> S): S {
-        val nodeAndIndicesQueue: Queue<Pair<TreeNode<T>, List<Int>>> = LinkedList()
-        nodeAndIndicesQueue += this to emptyList()
+        val nodeAndIndicesStack: Stack<Pair<TreeNode<T>, List<Int>>> = Stack()
+        nodeAndIndicesStack += this to emptyList()
         var acc = initial
 
-        while (nodeAndIndicesQueue.isNotEmpty()) {
-            val (treeNode, indices) = nodeAndIndicesQueue.poll()
+        while (nodeAndIndicesStack.isNotEmpty()) {
+            val (treeNode, indices) = nodeAndIndicesStack.pop()
             acc = f(acc, treeNode, indices)
-            treeNode.children.withIndex()
-                .forEach { (index, childTreeNode) -> nodeAndIndicesQueue += childTreeNode to indices.plus(index) }
+            treeNode.children.withIndex().reversed()
+                .forEach { (index, childTreeNode) -> nodeAndIndicesStack += childTreeNode to indices.plus(index) }
         }
 
         return acc
