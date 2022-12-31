@@ -1,8 +1,10 @@
-# kotlin-tree
+# kotlin-tree 🌳
 Kotlin Declarative APIs for Multi-way Tree Data.
 
 Easy to convert trees to other tree models, Path Enumeration Models and Adjacency Models, ect. 
 
+## Installation 
+This library is in preparation for release.
 
 ## Quick Start
 
