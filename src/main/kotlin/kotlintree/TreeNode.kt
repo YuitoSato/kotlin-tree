@@ -31,9 +31,9 @@ class TreeNode<T> private constructor(
         return fold(initial) { acc, element, currentIndices ->
             val level = currentIndices.size
             if (level == 0) acc else {
-                val newTree = leafOf(f(element))
-                acc.findSubTreeNodeByIndices(currentIndices.take(currentIndices.size - 1))
-                    ?.children?.add(newTree)
+                val newTreeNode = leafOf(f(element))
+                acc.getOrNull(currentIndices.take(currentIndices.size - 1))
+                    ?.children?.add(newTreeNode)
                 acc
             }
         }
@@ -43,20 +43,20 @@ class TreeNode<T> private constructor(
         val initial: TreeNode<T>? = null
         return fold(initial) { acc, element, currentIndices ->
             val condition = predicate(element)
-            val newTree = leafOf(element)
+            val newTreeNode = leafOf(element)
             when {
                 !condition -> acc
-                acc == null -> newTree
+                acc == null -> newTreeNode
                 else -> {
-                    acc.findSubTreeNodeByIndices(currentIndices.take(currentIndices.size - 1))
-                        ?.children?.add(newTree)
+                    acc.getOrNull(currentIndices.take(currentIndices.size - 1))
+                        ?.children?.add(newTreeNode)
                     acc
                 }
             }
         }
     }
 
-    fun findSubTreeNodeByIndices(indices: List<Int>): TreeNode<T>? {
+    fun getOrNull(indices: List<Int>): TreeNode<T>? {
         var current = this
         indices.forEach { index ->
             val currentOpt = current.children.getOrNull(index) ?: return null

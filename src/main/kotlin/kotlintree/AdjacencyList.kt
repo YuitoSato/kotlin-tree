@@ -27,12 +27,12 @@ class AdjacencyList<ID, VALUE> private constructor(
 
             while (itemAndIndicesStack.isNotEmpty()) {
                 val (listItem, indices) = itemAndIndicesStack.pop()
-                val newTree = leafOf(listItem.value)
+                val newTreeNode = leafOf(listItem.value)
                 val level = indices.size
                 if (level == 0) {
-                    tree = newTree
+                    tree = newTreeNode
                 } else {
-                    tree?.findSubTreeNodeByIndices(indices.take(indices.size - 1))?.children?.add(newTree)
+                    tree?.getOrNull(indices.take(indices.size - 1))?.children?.add(newTreeNode)
                 }
                 val children = parentNodeIdToChildren.getOrDefault(listItem.selfNodeId, mutableListOf())
                 parentNodeIdToChildren.remove(listItem.selfNodeId)
@@ -81,7 +81,7 @@ class AdjacencyList<ID, VALUE> private constructor(
                 treeNode.fold(initial) { acc, element, currentIndices ->
                     val level = currentIndices.size
                     val parentNode = if (level != 0) {
-                        treeNode.findSubTreeNodeByIndices(currentIndices.take(currentIndices.size - 1))
+                        treeNode.getOrNull(currentIndices.take(currentIndices.size - 1))
                     } else null
                     acc + AdjacencyListItem(
                         parentNodeId = parentNode?.value?.let(getSelfNodeId),
