@@ -48,9 +48,6 @@ class PathEnumerationList<ID, VALUE> private constructor(
 
         fun <ID, VALUE> of(list: List<PathEnumerationListItem<ID, VALUE>>) = PathEnumerationList(list)
 
-        fun <ID, VALUE> of(vararg list: PathEnumerationListItem<ID, VALUE>): PathEnumerationList<ID, VALUE> =
-            of(list.toList())
-
         fun <ID, VALUE> of(vararg list: Pair<List<ID>, VALUE>): PathEnumerationList<ID, VALUE> =
             of(list.map { PathEnumerationListItem.of(it.first, it.second) })
 

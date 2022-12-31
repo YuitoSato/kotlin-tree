@@ -49,7 +49,9 @@ class AdjacencyListTest : DescribeSpec({
 
             actual.treeNodes shouldBe expected
             actual.parentNodeNotFoundList shouldBe AdjacencyList.of(
-                AdjacencyListItem(2, 21, 21)
+                listOf(
+                    AdjacencyListItem(2, 21, 21)
+                )
             )
         }
     }
@@ -74,7 +76,28 @@ class AdjacencyListTest : DescribeSpec({
                     null to 1,
                     1 to 11,
                     11 to 111,
-                    1 to 12,
+                    1 to 12
+                )
+            )
+        }
+    }
+
+    describe("of") {
+        it("returns an instance with id pairs") {
+            AdjacencyList.of(
+                getSelfNodeId = { it },
+                listOf(
+                    null to 1,
+                    1 to 11,
+                    11 to 111,
+                    1 to 12
+                )
+            ) shouldBe AdjacencyList.of(
+                listOf(
+                    AdjacencyListItem.of(null, 1, 1),
+                    AdjacencyListItem.of(1, 11, 11),
+                    AdjacencyListItem.of(11, 111, 111),
+                    AdjacencyListItem.of(1, 12, 12)
                 )
             )
         }

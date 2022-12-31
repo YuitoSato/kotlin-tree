@@ -59,8 +59,6 @@ class AdjacencyList<ID, VALUE> private constructor(
 
         fun <ID, VALUE> of(list: List<AdjacencyListItem<ID, VALUE>>) = AdjacencyList(list)
 
-        fun <ID, VALUE> of(vararg list: AdjacencyListItem<ID, VALUE>) = AdjacencyList(list.toList())
-
         fun <ID, VALUE> of(getSelfNodeId: (VALUE) -> ID, list: List<Pair<ID?, VALUE>>) =
             AdjacencyList(
                 list.map { (parentNodeId, value) ->
