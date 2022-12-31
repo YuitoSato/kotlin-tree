@@ -33,7 +33,3 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
-
-application {
-    mainClass.set("MainKt")
-}
