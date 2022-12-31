@@ -1,4 +1,4 @@
-package kotlintree
+package com.github.yuitosato.kotlintree
 
 class PathEnumerationList<ID, VALUE> private constructor(
     private val list: List<PathEnumerationListItem<ID, VALUE>>
