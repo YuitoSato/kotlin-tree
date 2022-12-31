@@ -10,9 +10,9 @@ class PathEnumerationListTest : DescribeSpec({
         it("must be unique paths in a path enumeration list") {
             val exception = shouldThrow<Exception> {
                 PathEnumerationList.of(
-                    PathEnumerationListItem(listOf(1), 1),
-                    PathEnumerationListItem(listOf(1, 11), 11),
-                    PathEnumerationListItem(listOf(1, 11), 11)
+                    listOf(1) to 1,
+                    listOf(1, 11) to 11,
+                    listOf(1, 11) to 11
                 )
             }
             exception.message shouldBe "Paths must be unique in a path enumeration list."
@@ -22,16 +22,16 @@ class PathEnumerationListTest : DescribeSpec({
     describe("toTreeNode") {
         it("converts a tree node to a path enumeration list.") {
             val pathEnumerationList = PathEnumerationList.of(
-                PathEnumerationListItem(listOf(1, 11), 11),
-                PathEnumerationListItem(listOf(1), 1),
-                PathEnumerationListItem(listOf(2), 2),
-                PathEnumerationListItem(listOf(1, 11, 111), 111),
-                PathEnumerationListItem(listOf(1, 12), 12),
-                PathEnumerationListItem(listOf(2, 11), 11), // duplicated
-                PathEnumerationListItem(listOf(2, 11, 211), 211), // duplicated
-                PathEnumerationListItem(listOf(2, 111), 111), // duplicated
-                PathEnumerationListItem(listOf(1, 99, 999), 999), // a parent node is not found
-                PathEnumerationListItem(listOf(0, 11, 999), 999) // a parent node is not found
+                listOf(1, 11) to 11,
+                listOf(1) to 1,
+                listOf(2) to 2,
+                listOf(1, 11, 111) to 11,
+                listOf(1, 12) to 2,
+                listOf(2, 11) to 1, // duplicated
+                listOf(2, 11, 211) to 211, // duplicated
+                listOf(2, 111) to 11, // duplicated
+                listOf(1, 99, 999) to 999, // a parent node is not found
+                listOf(0, 11, 999) to 999 // a parent node is not found
             )
             val actual = pathEnumerationList.toTreeNode()
 
@@ -62,8 +62,8 @@ class PathEnumerationListTest : DescribeSpec({
                 )
             )
             val expectedParentNodeNotFoundList = PathEnumerationList.of(
-                PathEnumerationListItem(listOf(1, 99, 999), 999),
-                PathEnumerationListItem(listOf(0, 11, 999), 999)
+                listOf(1, 99, 999) to 999,
+                listOf(0, 11, 999) to 999
             )
 
             actual shouldBe PathEnumerationList.PathEnumerationListToTreeNodeParseResult(
@@ -94,10 +94,10 @@ class PathEnumerationListTest : DescribeSpec({
             )
 
             val expected = PathEnumerationList.of(
-                PathEnumerationListItem(listOf(1), 1),
-                PathEnumerationListItem(listOf(1, 11), 11),
-                PathEnumerationListItem(listOf(1, 11, 111), 111),
-                PathEnumerationListItem(listOf(1, 12), 12)
+                listOf(1) to 1,
+                listOf(1, 11) to 11,
+                listOf(1, 11, 111) to 111,
+                listOf(1, 12) to 12
             )
 
             actual shouldBe expected
