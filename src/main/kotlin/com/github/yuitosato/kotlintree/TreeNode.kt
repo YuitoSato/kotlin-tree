@@ -2,6 +2,9 @@ package com.github.yuitosato.kotlintree
 
 import java.util.Stack
 
+/**
+ * Class for Multi-way Trees
+ */
 class TreeNode<T> private constructor(
     val value: T,
     val children: MutableList<TreeNode<T>>
@@ -9,6 +12,8 @@ class TreeNode<T> private constructor(
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
+     *
+     * The "currentIndices" argument of the [operation] is the location of the node currently being processed.
      */
     fun <S> foldNode(initial: S, operation: (acc: S, treeNode: TreeNode<T>, currentIndices: List<Int>) -> S): S {
         val nodeAndIndicesStack: Stack<Pair<TreeNode<T>, List<Int>>> = Stack()
@@ -27,6 +32,8 @@ class TreeNode<T> private constructor(
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each element by depth-first-search.
+     *
+     * The "currentIndices" argument of the [operation] is the location of the node currently being processed.
      */
     fun <S> fold(initial: S, operation: (acc: S, element: T, currentIndices: List<Int>) -> S): S {
         return foldNode(initial) { acc, treeNode, currentIndices -> operation(acc, treeNode.value, currentIndices) }
@@ -113,6 +120,11 @@ class TreeNode<T> private constructor(
 
     /**
      * Returns a tree node at the given [indices] or `null` if the [indices] is out of bounds of this tree node.
+     *
+     * Returns the top of the tree node if an empty indices is received.
+     * emptyList -> Returns the top of the node
+     * listOf(1) -> Returns the second child node of the top of the node.
+     * listOf(1, 0) -> Returns the first child node of the second child node of the top of the node.
      */
     fun getOrNull(indices: List<Int>): TreeNode<T>? {
         var current = this
