@@ -2,7 +2,7 @@
 
 Kotlin Declarative APIs for Multi-way Tree Data.
 
-Easy to convert trees to other tree models, Path Enumeration Models and Adjacency Models, ect.
+Easy to convert trees to other tree models, Path Enumeration Models and Adjacency Models, etc.
 
 ## Installation
 
@@ -41,6 +41,17 @@ treeNode.filter { ele -> ele % 2 != 0 }
 // 1
 // └── 11
 //     └── 111
+
+treeNode.find { ele -> ele == 11 }
+// 11
+// └── 111
+
+treeNode.forEach { ele -> println(ele) }
+// => 1
+// => 11
+// => 111
+// => 112
+// => 12
 ```
 
 ## Examples

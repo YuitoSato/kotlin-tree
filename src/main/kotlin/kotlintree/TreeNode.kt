@@ -7,7 +7,7 @@ class TreeNode<T> private constructor(
     val children: MutableList<TreeNode<T>>
 ) {
 
-    fun <S> foldTree(initial: S, f: (acc: S, treeNode: TreeNode<T>, currentIndices: List<Int>) -> S): S {
+    fun <S> foldNode(initial: S, f: (acc: S, treeNode: TreeNode<T>, currentIndices: List<Int>) -> S): S {
         val nodeAndIndicesStack: Stack<Pair<TreeNode<T>, List<Int>>> = Stack()
         nodeAndIndicesStack += this to emptyList()
         var acc = initial
@@ -23,15 +23,15 @@ class TreeNode<T> private constructor(
     }
 
     fun <S> fold(initial: S, f: (acc: S, element: T, currentIndices: List<Int>) -> S): S {
-        return foldTree(initial) { acc, treeNode, currentIndices -> f(acc, treeNode.value, currentIndices) }
+        return foldNode(initial) { acc, treeNode, currentIndices -> f(acc, treeNode.value, currentIndices) }
     }
 
-    fun <S> map(f: (T) -> S): TreeNode<S> {
-        val initial: TreeNode<S> = leafOf(f(value))
-        return fold(initial) { acc, element, currentIndices ->
+    fun <S> mapNode(f: (TreeNode<T>) -> S): TreeNode<S> {
+        val initial: TreeNode<S> = leafOf(f(this))
+        return foldNode(initial) { acc, treeNode, currentIndices ->
             val level = currentIndices.size
             if (level == 0) acc else {
-                val newTreeNode = leafOf(f(element))
+                val newTreeNode = leafOf(f(treeNode))
                 acc.getOrNull(currentIndices.take(currentIndices.size - 1))
                     ?.children?.add(newTreeNode)
                 acc
@@ -39,11 +39,19 @@ class TreeNode<T> private constructor(
         }
     }
 
-    fun filter(predicate: (T) -> Boolean): TreeNode<T>? {
+    fun <S> map(f: (T) -> S): TreeNode<S> = mapNode { treeNode -> f(treeNode.value) }
+
+    fun <S> forEachNode(f: (TreeNode<T>) -> S) {
+        mapNode(f)
+    }
+
+    fun <S> forEach(f: (T) -> S) = forEachNode { treeNode -> f(treeNode.value) }
+
+    fun filterByNodeCondition(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>? {
         val initial: TreeNode<T>? = null
-        return fold(initial) { acc, element, currentIndices ->
-            val condition = predicate(element)
-            val newTreeNode = leafOf(element)
+        return foldNode(initial) { acc, treeNode, currentIndices ->
+            val condition = predicate(treeNode)
+            val newTreeNode = leafOf(treeNode.value)
             when {
                 !condition -> acc
                 acc == null -> newTreeNode
@@ -55,6 +63,20 @@ class TreeNode<T> private constructor(
             }
         }
     }
+
+    fun filter(predicate: (T) -> Boolean): TreeNode<T>? = filterByNodeCondition { treeNode -> predicate(treeNode.value) }
+
+    fun findByNodeCondition(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>? {
+        var resultTreeNode: TreeNode<T>? = null
+        this.forEachNode { treeNode ->
+            if (predicate(treeNode) && resultTreeNode == null) {
+                resultTreeNode = treeNode
+            }
+        }
+        return resultTreeNode
+    }
+
+    fun find(predicate: (T) -> Boolean): TreeNode<T>? = findByNodeCondition { treeNode -> predicate(treeNode.value) }
 
     fun getOrNull(indices: List<Int>): TreeNode<T>? {
         var current = this
