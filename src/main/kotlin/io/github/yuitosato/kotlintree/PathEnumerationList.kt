@@ -1,4 +1,4 @@
-package com.github.yuitosato.kotlintree
+package io.github.yuitosato.kotlintree
 
 /**
  * Class for Path Enumeration Model.
