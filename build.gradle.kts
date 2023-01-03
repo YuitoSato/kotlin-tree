@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.10"
-    application
 
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
     id("signing")
@@ -28,8 +27,16 @@ tasks.test {
     useJUnitPlatform()
 }
 
+val jvmVersion = 11
+
+kotlin {
+    jvmToolchain {
+        (this).languageVersion.set(JavaLanguageVersion.of(jvmVersion))
+    }
+}
+
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = jvmVersion.toString()
 }
 
 tasks.withType<Test>().configureEach {
@@ -85,8 +92,8 @@ publishing {
                 val sonatypeUsername: String? by project
                 println(sonatypeUsername)
                 val sonatypePassword: String? by project
-                username = "$sonatypeUsername"
-                password = "$sonatypePassword"
+                username = sonatypeUsername
+                password = sonatypePassword
             }
 
             val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
