@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.yuitosato"
-version = "0.0.0"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -90,7 +90,6 @@ publishing {
         maven {
             credentials {
                 val sonatypeUsername: String? by project
-                println(sonatypeUsername)
                 val sonatypePassword: String? by project
                 username = sonatypeUsername
                 password = sonatypePassword

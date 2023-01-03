@@ -6,7 +6,21 @@ Easy to convert trees to other tree models, Path Enumeration Models and Adjacenc
 
 ## Installation
 
-This library is in preparation for release.
+### Gradle
+
+```kts
+implementation("io.github.yuitosato:kotlin-tree:1.0.0")
+```
+
+### Maven
+
+```pom
+<dependency>
+    <groupId>io.github.yuitosato</groupId>
+    <artifactId>kotlin-tree</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ## Definition
 
