@@ -117,6 +117,9 @@ class TreeNode<T> private constructor(
         return current
     }
 
+    /**
+     * Returns a tree node with indices.
+     */
     fun withIndices(): TreeNode<IndexedValue<T>> {
         val initial = leafOf(IndexedValue(listOf(), value))
         return foldNodeInternal(initial) { acc, treeNode, indices ->
@@ -130,6 +133,11 @@ class TreeNode<T> private constructor(
         }
     }
 
+    /**
+     * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
+     *
+     * The "indices" argument of the [operation] is the location of the node currently being processed.
+     */
     internal fun <S> foldNodeInternal(
         initial: S,
         operation: (acc: S, treeNode: TreeNode<T>, indices: List<Int>) -> S
@@ -176,6 +184,9 @@ class TreeNode<T> private constructor(
     }
 }
 
+/**
+ * Value with indices for TreeNode operations.
+ */
 data class IndexedValue<T>(val indices: List<Int>, val value: T)
 
 /**
