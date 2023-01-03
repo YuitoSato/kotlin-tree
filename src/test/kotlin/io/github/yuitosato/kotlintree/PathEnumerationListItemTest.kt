@@ -1,4 +1,4 @@
-package com.github.yuitosato.kotlintree
+package io.github.yuitosato.kotlintree
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
