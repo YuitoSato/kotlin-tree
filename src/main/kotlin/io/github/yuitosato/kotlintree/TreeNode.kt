@@ -14,7 +14,7 @@ class TreeNode<T> private constructor(
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
      */
     fun <S> foldNode(initial: S, operation: (acc: S, treeNode: TreeNode<T>) -> S): S =
-        foldNodeInternal(initial) { acc, treeNode, indices -> operation(acc, treeNode) }
+        foldNodeInternal(initial) { acc, treeNode, _ -> operation(acc, treeNode) }
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each element by depth-first-search.
@@ -88,7 +88,7 @@ class TreeNode<T> private constructor(
      */
     fun findNode(predicate: (TreeNode<T>) -> Boolean): List<TreeNode<T>> {
         val initial: List<TreeNode<T>> = listOf()
-        return foldNodeInternal(initial) { acc, treeNode, indices ->
+        return foldNodeInternal(initial) { acc, treeNode, _ ->
             if (predicate(treeNode)) {
                 acc.plus(treeNode)
             } else acc
