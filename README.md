@@ -111,10 +111,16 @@ treeNode.filterNode { node -> node.value % 2 != 0 }
 // └── 11
 //     └── 111
 
-treeNode.find { ele -> ele == 11 }
-treeNode.findNode { node -> node.value == 11 }
-// 11
-// └── 111
+treeNode.find { ele -> ele > 10 }
+treeNode.findNode { node -> node.value > 10 }
+// [
+//   11
+//   ├── 111,
+//   └── 112,
+//   111,
+//   112,
+//   12
+// ]
 
 treeNode.forEach { ele -> println(ele) }
 treeNode.forEachNode { node -> println(node.value) }
@@ -124,9 +130,16 @@ treeNode.forEachNode { node -> println(node.value) }
 // => 112
 // => 12
 
-treeNode.fold(0) { (acc, ele, indices) -> acc + ele }
-treeNode.foldNode(0) { (acc, node, indices) -> node.value + ele }
+treeNode.fold(0) { (acc, ele) -> acc + ele }
+treeNode.foldNode(0) { (acc, node) -> node.value + ele }
 // (1 + 11 + 111 + 112 + 12)
+
+treeNode.withIndices()
+// ([], 1)
+// ├── ([0], 11)
+// │   ├── ([0, 0], 111)
+// │   └── ([0, 1], 112)
+// └── ([1], 12)
 
 treeNode.getOrElse(listOf(0, 1))
 // => leafOf(112)

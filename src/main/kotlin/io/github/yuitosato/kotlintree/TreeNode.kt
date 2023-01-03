@@ -12,32 +12,15 @@ class TreeNode<T> private constructor(
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
-     *
-     * The "indices" argument of the [operation] is the location of the node currently being processed.
      */
-    fun <S> foldNode(initial: S, operation: (acc: S, treeNode: TreeNode<T>, indices: List<Int>) -> S): S {
-        val nodeAndIndicesStack: Stack<Pair<TreeNode<T>, List<Int>>> = Stack()
-        nodeAndIndicesStack += this to emptyList()
-        var acc = initial
-
-        while (nodeAndIndicesStack.isNotEmpty()) {
-            val (treeNode, indices) = nodeAndIndicesStack.pop()
-            acc = operation(acc, treeNode, indices)
-            treeNode.children.withIndex().reversed()
-                .forEach { (index, childTreeNode) -> nodeAndIndicesStack += childTreeNode to indices.plus(index) }
-        }
-
-        return acc
-    }
+    fun <S> foldNode(initial: S, operation: (acc: S, treeNode: TreeNode<T>) -> S): S =
+        foldNodeInternal(initial) { acc, treeNode, indices -> operation(acc, treeNode) }
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each element by depth-first-search.
-     *
-     * The "indices" argument of the [operation] is the location of the node currently being processed.
      */
-    fun <S> fold(initial: S, operation: (acc: S, element: T, indices: List<Int>) -> S): S {
-        return foldNode(initial) { acc, treeNode, indices -> operation(acc, treeNode.value, indices) }
-    }
+    fun <S> fold(initial: S, operation: (acc: S, element: T) -> S): S =
+        foldNode(initial) { acc, treeNode -> operation(acc, treeNode.value) }
 
     /**
      * Returns a tree node containing the results of applying the given [transform] function
@@ -45,7 +28,7 @@ class TreeNode<T> private constructor(
      */
     fun <S> mapNode(transform: (TreeNode<T>) -> S): TreeNode<S> {
         val initial: TreeNode<S> = leafOf(transform(this))
-        return foldNode(initial) { acc, treeNode, indices ->
+        return foldNodeInternal(initial) { acc, treeNode, indices ->
             val level = indices.size
             if (level == 0) acc else {
                 val newTreeNode = leafOf(transform(treeNode))
@@ -79,7 +62,7 @@ class TreeNode<T> private constructor(
      */
     fun filterNode(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>? {
         val initial: TreeNode<T>? = null
-        return foldNode(initial) { acc, treeNode, indices ->
+        return foldNodeInternal(initial) { acc, treeNode, indices ->
             val condition = predicate(treeNode)
             val newTreeNode = leafOf(treeNode.value)
             when {
@@ -101,22 +84,21 @@ class TreeNode<T> private constructor(
         filterNode { treeNode -> predicate(treeNode.value) }
 
     /**
-     * Returns a tree node containing only tree nodes matching the given [predicate].
+     * Returns tree nodes matching the given [predicate].
      */
-    fun findNode(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>? {
-        var resultTreeNode: TreeNode<T>? = null
-        this.forEachNode { treeNode ->
-            if (predicate(treeNode) && resultTreeNode == null) {
-                resultTreeNode = treeNode
-            }
+    fun findNode(predicate: (TreeNode<T>) -> Boolean): List<TreeNode<T>> {
+        val initial: List<TreeNode<T>> = listOf()
+        return foldNodeInternal(initial) { acc, treeNode, indices ->
+            if (predicate(treeNode)) {
+                acc.plus(treeNode)
+            } else acc
         }
-        return resultTreeNode
     }
 
     /**
-     * Returns a tree node containing only elements matching the given [predicate].
+     * Returns tree nodes matching the given [predicate].
      */
-    fun find(predicate: (T) -> Boolean): TreeNode<T>? = findNode { treeNode -> predicate(treeNode.value) }
+    fun find(predicate: (T) -> Boolean): List<TreeNode<T>> = findNode { treeNode -> predicate(treeNode.value) }
 
     /**
      * Returns a tree node at the given [indices] or `null` if the [indices] is out of bounds of this tree node.
@@ -133,6 +115,45 @@ class TreeNode<T> private constructor(
             current = currentOpt
         }
         return current
+    }
+
+    /**
+     * Returns a tree node with indices.
+     */
+    fun withIndices(): TreeNode<IndexedValue<T>> {
+        val initial = leafOf(IndexedValue(listOf(), value))
+        return foldNodeInternal(initial) { acc, treeNode, indices ->
+            val level = indices.size
+            if (level == 0) acc else {
+                val newTreeNode = leafOf(IndexedValue(indices, treeNode.value))
+                acc.getOrNull(indices.take(indices.size - 1))
+                    ?.children?.add(newTreeNode)
+                acc
+            }
+        }
+    }
+
+    /**
+     * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
+     *
+     * The "indices" argument of the [operation] is the location of the node currently being processed.
+     */
+    internal fun <S> foldNodeInternal(
+        initial: S,
+        operation: (acc: S, treeNode: TreeNode<T>, indices: List<Int>) -> S
+    ): S {
+        val nodeAndIndicesStack: Stack<Pair<TreeNode<T>, List<Int>>> = Stack()
+        nodeAndIndicesStack += this to emptyList()
+        var acc = initial
+
+        while (nodeAndIndicesStack.isNotEmpty()) {
+            val (treeNode, indices) = nodeAndIndicesStack.pop()
+            acc = operation(acc, treeNode, indices)
+            treeNode.children.withIndex().reversed()
+                .forEach { (index, childTreeNode) -> nodeAndIndicesStack += childTreeNode to indices.plus(index) }
+        }
+
+        return acc
     }
 
     companion object {
@@ -162,6 +183,11 @@ class TreeNode<T> private constructor(
         return "TreeNode($value, $children)"
     }
 }
+
+/**
+ * Value with indices for TreeNode operations.
+ */
+data class IndexedValue<T>(val indices: List<Int>, val value: T)
 
 /**
  * Returns a tree node. same as Tree.of.
