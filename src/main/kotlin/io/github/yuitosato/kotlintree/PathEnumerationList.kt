@@ -67,14 +67,14 @@ class PathEnumerationList<ID, VALUE> private constructor(
             treeNode: TreeNode<VALUE>
         ): PathEnumerationList<ID, VALUE> {
             val list =
-                treeNode.fold(emptyList<PathEnumerationListItem<ID, VALUE>>()) { acc, element, indices ->
+                treeNode.foldNodeInternal(emptyList<PathEnumerationListItem<ID, VALUE>>()) { acc, node, indices ->
                     val path = (0..indices.size).mapNotNull { level ->
                         treeNode.getOrNull(indices.take(level))?.let { getNodeId(it.value) }
                     }
                     acc.plus(
                         PathEnumerationListItem(
                             path,
-                            element
+                            node.value
                         )
                     )
                 }

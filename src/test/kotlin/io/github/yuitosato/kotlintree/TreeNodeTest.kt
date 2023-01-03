@@ -5,6 +5,40 @@ import io.kotest.matchers.shouldBe
 
 class TreeNodeTest : DescribeSpec({
 
+    describe("foldNodeInternal") {
+        it("folds a tree node and returns the sums of each node with indices") {
+            val tree = nodeOf(
+                1,
+                mutableListOf(
+                    nodeOf(
+                        11,
+                        mutableListOf(
+                            leafOf(111)
+                        )
+                    ),
+                    leafOf(12)
+                )
+            )
+
+            val indicesList = mutableListOf<List<Int>>()
+
+            val actual = tree.foldNodeInternal(emptyList<Int>()) { acc, treeNode, indices ->
+                indicesList.add(indices)
+                acc + treeNode.fold(0) { sum, ele ->
+                    sum + ele
+                }
+            }
+
+            actual shouldBe listOf(135, 122, 111, 12)
+            indicesList shouldBe listOf(
+                listOf(),
+                listOf(0),
+                listOf(0, 0),
+                listOf(1)
+            )
+        }
+    }
+
     describe("foldNode") {
         it("folds a tree node and returns the sums of each node") {
             val tree = nodeOf(
@@ -20,41 +54,13 @@ class TreeNodeTest : DescribeSpec({
                 )
             )
 
-            val actual = tree.foldNode(emptyList<Int>()) { acc, treeNode, _ ->
-                acc + treeNode.fold(0) { sum, ele, _ ->
+            val actual = tree.foldNode(emptyList<Int>()) { acc, treeNode ->
+                acc + treeNode.fold(0) { sum, ele ->
                     sum + ele
                 }
             }
 
             actual shouldBe listOf(135, 122, 111, 12)
-        }
-
-        it("folds a tree node and returns indices list") {
-            val tree = nodeOf(
-                1,
-                mutableListOf(
-                    nodeOf(
-                        11,
-                        mutableListOf(
-                            leafOf(111)
-                        )
-                    ),
-                    leafOf(12)
-                )
-            )
-
-            // flatten
-            val actual = tree.foldNode(mutableListOf<List<Int>>()) { acc, _, indices ->
-                acc.add(indices)
-                acc
-            }.toList()
-
-            actual shouldBe listOf(
-                listOf(),
-                listOf(0),
-                listOf(0, 0),
-                listOf(1)
-            )
         }
     }
 
@@ -73,7 +79,7 @@ class TreeNodeTest : DescribeSpec({
                 )
             )
 
-            val actual = tree.fold(emptyList<Int>()) { acc, ele, _ ->
+            val actual = tree.fold(emptyList<Int>()) { acc, ele ->
                 acc + ele
             }
 
@@ -97,7 +103,7 @@ class TreeNodeTest : DescribeSpec({
             )
 
             val actual = tree.mapNode { treeNode ->
-                treeNode.fold(0) { acc, element, _ ->
+                treeNode.fold(0) { acc, element ->
                     acc + element
                 }
             }
@@ -172,7 +178,7 @@ class TreeNodeTest : DescribeSpec({
 
             tree.forEachNode { treeNode ->
                 actual.add(
-                    treeNode.fold(0) { acc, element, _ ->
+                    treeNode.fold(0) { acc, element ->
                         acc + element
                     }
                 )
@@ -225,7 +231,7 @@ class TreeNodeTest : DescribeSpec({
             )
 
             val actual = tree.filterNode { treeNode ->
-                treeNode.find { it == 111 } != null
+                treeNode.find { it == 111 }.isNotEmpty()
             }
 
             val expected = nodeOf(
@@ -297,7 +303,7 @@ class TreeNodeTest : DescribeSpec({
     }
 
     describe("findNode") {
-        it("find a tree node that matches the condition") {
+        it("find tree nodes that matches the condition") {
             val tree = nodeOf(
                 1,
                 mutableListOf(
@@ -313,27 +319,37 @@ class TreeNodeTest : DescribeSpec({
             )
 
             val actual = tree.findNode { treeNode ->
-                treeNode.find { it == 111 } != null
+                treeNode.find { it % 2 != 0 }.isNotEmpty()
             }
 
-            val expected = nodeOf(
-                1,
-                mutableListOf(
-                    nodeOf(
-                        11,
-                        mutableListOf(
-                            leafOf(111)
-                        )
-                    ),
-                    leafOf(12),
-                    leafOf(13)
-                )
+            val expected = listOf(
+                nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                leafOf(111)
+                            )
+                        ),
+                        leafOf(12),
+                        leafOf(13)
+                    )
+                ),
+                nodeOf(
+                    11,
+                    mutableListOf(
+                        leafOf(111)
+                    )
+                ),
+                leafOf(111),
+                leafOf(13)
             )
 
             actual shouldBe expected
         }
 
-        it("returns null if that the tree node does not match the condition.") {
+        it("returns an empty list if that the tree node does not match the condition.") {
             val tree = nodeOf(
                 1,
                 mutableListOf(
@@ -349,12 +365,12 @@ class TreeNodeTest : DescribeSpec({
 
             val actual = tree.findNode { it.value == 999 }
 
-            actual shouldBe null
+            actual shouldBe emptyList()
         }
     }
 
     describe("find") {
-        it("find a tree node that matches a condition") {
+        it("find tree nodes that matches a condition") {
             val tree = nodeOf(
                 1,
                 mutableListOf(
@@ -369,13 +385,30 @@ class TreeNodeTest : DescribeSpec({
                 )
             )
 
-            val actual = tree.find { it == 11 }
+            val actual = tree.find { it % 2 != 0 }
 
-            val expected = nodeOf(
-                11,
-                mutableListOf(
-                    leafOf(111)
-                )
+            val expected = listOf(
+                nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                leafOf(111)
+                            )
+                        ),
+                        leafOf(12),
+                        leafOf(13)
+                    )
+                ),
+                nodeOf(
+                    11,
+                    mutableListOf(
+                        leafOf(111)
+                    )
+                ),
+                leafOf(111),
+                leafOf(13)
             )
 
             actual shouldBe expected
@@ -410,6 +443,37 @@ class TreeNodeTest : DescribeSpec({
     describe("leafOf") {
         it("returns a tree node with empty children") {
             leafOf(1) shouldBe TreeNode.of(1, mutableListOf())
+        }
+    }
+
+    describe("withIndices") {
+        it("returns a tree node with indices") {
+            val tree = nodeOf(
+                1,
+                mutableListOf(
+                    nodeOf(
+                        11,
+                        mutableListOf(
+                            leafOf(111),
+                            leafOf(112)
+                        )
+                    ),
+                    leafOf(12)
+                )
+            )
+            tree.withIndices() shouldBe nodeOf(
+                IndexedValue(listOf(), 1),
+                mutableListOf(
+                    nodeOf(
+                        IndexedValue(listOf(0), 11),
+                        mutableListOf(
+                            leafOf(IndexedValue(listOf(0, 0), 111)),
+                            leafOf(IndexedValue(listOf(0, 1), 112))
+                        )
+                    ),
+                    leafOf(IndexedValue(listOf(1), 12))
+                )
+            )
         }
     }
 })
