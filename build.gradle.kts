@@ -90,7 +90,6 @@ publishing {
         maven {
             credentials {
                 val sonatypeUsername: String? by project
-                println(sonatypeUsername)
                 val sonatypePassword: String? by project
                 username = sonatypeUsername
                 password = sonatypePassword
