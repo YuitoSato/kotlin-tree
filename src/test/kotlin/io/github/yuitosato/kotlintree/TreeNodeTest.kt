@@ -415,6 +415,328 @@ class TreeNodeTest : DescribeSpec({
         }
     }
 
+    describe("flatMapNode") {
+        describe("prepend=true") {
+            it("returns a tree node containing the results of applying the given [transform] function and prepend a transformed node to the original tree") {
+                val tree = nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                leafOf(111)
+                            )
+                        ),
+                        leafOf(12),
+                        leafOf(13)
+                    )
+                )
+                val actual = tree.flatMapNode(true) { nodeOf(it.value, mutableListOf(leafOf(0))) }
+                actual shouldBe nodeOf(
+                    1,
+                    mutableListOf(
+                        leafOf(0),
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                leafOf(0),
+                                nodeOf(
+                                    111,
+                                    mutableListOf(
+                                        leafOf(0)
+                                    )
+                                )
+                            )
+                        ),
+                        nodeOf(
+                            12,
+                            mutableListOf(
+                                leafOf(0)
+                            )
+                        ),
+                        nodeOf(
+                            13,
+                            mutableListOf(
+                                leafOf(0)
+                            )
+                        )
+                    )
+                )
+            }
+        }
+
+        describe("prepend=false") {
+            it("returns a tree node containing the results of applying the given [transform] function and add a transformed node to the original tree") {
+                val tree = nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                leafOf(111)
+                            )
+                        ),
+                        leafOf(12),
+                        leafOf(13)
+                    )
+                )
+                val actual = tree.flatMapNode(false) { nodeOf(it.value, mutableListOf(leafOf(0))) }
+                actual shouldBe nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                nodeOf(
+                                    111,
+                                    mutableListOf(
+                                        leafOf(0)
+                                    )
+                                ),
+                                leafOf(0)
+                            )
+                        ),
+                        nodeOf(
+                            12,
+                            mutableListOf(
+                                leafOf(0)
+                            )
+                        ),
+                        nodeOf(
+                            13,
+                            mutableListOf(
+                                leafOf(0)
+                            )
+                        ),
+                        leafOf(0)
+                    )
+                )
+            }
+        }
+    }
+
+    describe("flatMap") {
+        describe("prepend=true") {
+            it("returns a tree node containing the results of applying the given [transform] function and prepend a transformed element to the original tree") {
+                val tree = nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                leafOf(111)
+                            )
+                        ),
+                        leafOf(12),
+                        leafOf(13)
+                    )
+                )
+                val actual = tree.flatMap(true) { nodeOf(it, mutableListOf(leafOf(0))) }
+                actual shouldBe nodeOf(
+                    1,
+                    mutableListOf(
+                        leafOf(0),
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                leafOf(0),
+                                nodeOf(
+                                    111,
+                                    mutableListOf(
+                                        leafOf(0)
+                                    )
+                                )
+                            )
+                        ),
+                        nodeOf(
+                            12,
+                            mutableListOf(
+                                leafOf(0)
+                            )
+                        ),
+                        nodeOf(
+                            13,
+                            mutableListOf(
+                                leafOf(0)
+                            )
+                        )
+                    )
+                )
+            }
+        }
+
+        describe("prepend=false") {
+            it("returns a tree node containing the results of applying the given [transform] function and add a transformed element to the original tree") {
+                val tree = nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                leafOf(111)
+                            )
+                        ),
+                        leafOf(12),
+                        leafOf(13)
+                    )
+                )
+                val actual = tree.flatMap(false) { nodeOf(it, mutableListOf(leafOf(0))) }
+                actual shouldBe nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                nodeOf(
+                                    111,
+                                    mutableListOf(
+                                        leafOf(0)
+                                    )
+                                ),
+                                leafOf(0)
+                            )
+                        ),
+                        nodeOf(
+                            12,
+                            mutableListOf(
+                                leafOf(0)
+                            )
+                        ),
+                        nodeOf(
+                            13,
+                            mutableListOf(
+                                leafOf(0)
+                            )
+                        ),
+                        leafOf(0)
+                    )
+                )
+            }
+        }
+    }
+
+    describe("flatten") {
+        describe("prepend=true") {
+            it("should prepend child nodes in each element to each node") {
+                nodeOf(
+                    nodeOf(
+                        1,
+                        mutableListOf(
+                            leafOf(11)
+                        )
+                    ),
+                    mutableListOf(
+                        nodeOf(
+                            nodeOf(
+                                2,
+                                mutableListOf(
+                                    leafOf(21),
+                                    leafOf(22)
+                                )
+                            ),
+                            mutableListOf(
+                                nodeOf(
+                                    nodeOf(
+                                        3,
+                                        mutableListOf(
+                                            leafOf(31),
+                                            leafOf(32),
+                                            leafOf(33)
+                                        )
+                                    ),
+                                    mutableListOf(
+                                        leafOf(leafOf(4))
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ).flatten(true) shouldBe nodeOf(
+                    1,
+                    mutableListOf(
+                        leafOf(11),
+                        nodeOf(
+                            2,
+                            mutableListOf(
+                                leafOf(21),
+                                leafOf(22),
+                                nodeOf(
+                                    3,
+                                    mutableListOf(
+                                        leafOf(31),
+                                        leafOf(32),
+                                        leafOf(33),
+                                        leafOf(4)
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            }
+        }
+
+        describe("prepend=false") {
+            it("should add child nodes in each element to the end of each node") {
+                nodeOf(
+                    nodeOf(
+                        1,
+                        mutableListOf(
+                            leafOf(11)
+                        )
+                    ),
+                    mutableListOf(
+                        nodeOf(
+                            nodeOf(
+                                2,
+                                mutableListOf(
+                                    leafOf(21),
+                                    leafOf(22)
+                                )
+                            ),
+                            mutableListOf(
+                                nodeOf(
+                                    nodeOf(
+                                        3,
+                                        mutableListOf(
+                                            leafOf(31),
+                                            leafOf(32),
+                                            leafOf(33)
+                                        )
+                                    ),
+                                    mutableListOf(
+                                        leafOf(leafOf(4))
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ).flatten(false) shouldBe nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            2,
+                            mutableListOf(
+                                nodeOf(
+                                    3,
+                                    mutableListOf(
+                                        leafOf(4),
+                                        leafOf(31),
+                                        leafOf(32),
+                                        leafOf(33)
+                                    )
+                                ),
+                                leafOf(21),
+                                leafOf(22)
+                            )
+                        ),
+                        leafOf(11)
+                    )
+                )
+            }
+        }
+    }
+
     describe("nodeOf") {
         it("returns a tree node") {
             nodeOf(
