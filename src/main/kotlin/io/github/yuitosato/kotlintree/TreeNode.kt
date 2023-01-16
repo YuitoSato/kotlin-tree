@@ -101,6 +101,20 @@ class TreeNode<T> private constructor(
     fun find(predicate: (T) -> Boolean): List<TreeNode<T>> = findNode { treeNode -> predicate(treeNode.value) }
 
     /**
+     * Returns a tree node containing the results of applying the given [transform] function to each element in the original tree node and flatten the nodes.
+     * See also [flatten]
+     */
+    fun <S> flatMapNode(prepend: Boolean, transform: (TreeNode<T>) -> TreeNode<S>): TreeNode<S> =
+        mapNode(transform).flatten(prepend)
+
+    /**
+     * Returns a tree node containing the results of applying the given [transform] function to each node in the original tree node and flatten the nodes.
+     * See also [flatten]
+     */
+    fun <S> flatMap(prepend: Boolean, transform: (T) -> TreeNode<S>): TreeNode<S> =
+        flatMapNode(prepend) { treeNode -> transform(treeNode.value) }
+
+    /**
      * Returns a tree node at the given [indices] or `null` if the [indices] is out of bounds of this tree node.
      *
      * Returns the top of the tree node if an empty indices is received.
@@ -182,6 +196,27 @@ class TreeNode<T> private constructor(
     override fun toString(): String {
         return "TreeNode($value, $children)"
     }
+}
+
+/**
+ * Flatten a nested tree node.
+ * If [prepend] is true, child nodes in each element are prepended to each node.
+ */
+fun <T> TreeNode<TreeNode<T>>.flatten(prepend: Boolean): TreeNode<T> {
+    val nodeAndIndicesStack: Stack<Pair<TreeNode<TreeNode<T>>, List<Int>>> = Stack()
+    val resultTree = this.value
+    this.children.withIndex().reversed()
+        .forEach { (index, childTreeNode) -> nodeAndIndicesStack += childTreeNode to emptyList<Int>().plus(index + if (prepend) resultTree.children.size else 0) }
+
+    while (nodeAndIndicesStack.isNotEmpty()) {
+        val (treeNode, indices) = nodeAndIndicesStack.pop()
+        val newTreeNode = treeNode.value
+        resultTree.getOrNull(indices.take(indices.size - 1))?.children?.add(indices.last(), newTreeNode)
+        treeNode.children.withIndex().reversed()
+            .forEach { (index, childTreeNode) -> nodeAndIndicesStack += childTreeNode to indices.plus(index + if (prepend) newTreeNode.children.size else 0) }
+    }
+
+    return resultTree
 }
 
 /**
