@@ -615,6 +615,24 @@ class TreeNodeTest : DescribeSpec({
         }
     }
 
+    describe("withLevel") {
+        it("should return a tree node with zero-based levels.") {
+            TODO()
+        }
+    }
+
+    describe("toFlatList") {
+        it("should flatten a tree node and return a flat list of elements ") {
+            TODO()
+        }
+    }
+
+    describe("toFlatListNode") {
+        it("should flatten a tree node and return a flat list of nodes") {
+            TODO()
+        }
+    }
+
     describe("flatten") {
         describe("prepend=true") {
             it("should prepend child nodes in each element to each node") {
@@ -784,16 +802,16 @@ class TreeNodeTest : DescribeSpec({
                 )
             )
             tree.withIndices() shouldBe nodeOf(
-                IndexedValue(listOf(), 1),
+                ValueWithIndices(listOf(), 1),
                 mutableListOf(
                     nodeOf(
-                        IndexedValue(listOf(0), 11),
+                        ValueWithIndices(listOf(0), 11),
                         mutableListOf(
-                            leafOf(IndexedValue(listOf(0, 0), 111)),
-                            leafOf(IndexedValue(listOf(0, 1), 112))
+                            leafOf(ValueWithIndices(listOf(0, 0), 111)),
+                            leafOf(ValueWithIndices(listOf(0, 1), 112))
                         )
                     ),
-                    leafOf(IndexedValue(listOf(1), 12))
+                    leafOf(ValueWithIndices(listOf(1), 12))
                 )
             )
         }
