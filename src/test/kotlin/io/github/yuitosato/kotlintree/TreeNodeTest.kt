@@ -617,19 +617,96 @@ class TreeNodeTest : DescribeSpec({
 
     describe("withLevel") {
         it("should return a tree node with zero-based levels.") {
-            TODO()
+            nodeOf(
+                1,
+                mutableListOf(
+                    nodeOf(
+                        11,
+                        mutableListOf(
+                            leafOf(111)
+                        )
+                    ),
+                    leafOf(12),
+                    leafOf(13)
+                )
+            ).withLevel() shouldBe nodeOf(
+                ValueWithLevel(0, 1),
+                mutableListOf(
+                    nodeOf(
+                        ValueWithLevel(1, 11),
+                        mutableListOf(
+                            leafOf(ValueWithLevel(2, 111))
+                        )
+                    ),
+                    leafOf(ValueWithLevel(1, 12)),
+                    leafOf(ValueWithLevel(1, 13))
+                )
+            )
         }
     }
 
     describe("toFlatList") {
         it("should flatten a tree node and return a flat list of elements ") {
-            TODO()
+            nodeOf(
+                1,
+                mutableListOf(
+                    nodeOf(
+                        11,
+                        mutableListOf(
+                            leafOf(111)
+                        )
+                    ),
+                    leafOf(12),
+                    leafOf(13)
+                )
+            ).toFlatList() shouldBe listOf(
+                1,
+                11,
+                111,
+                12,
+                13
+            )
         }
     }
 
     describe("toFlatListNode") {
         it("should flatten a tree node and return a flat list of nodes") {
-            TODO()
+            nodeOf(
+                1,
+                mutableListOf(
+                    nodeOf(
+                        11,
+                        mutableListOf(
+                            leafOf(111)
+                        )
+                    ),
+                    leafOf(12),
+                    leafOf(13)
+                )
+            ).toFlatListNode() shouldBe listOf(
+                nodeOf(
+                    1,
+                    mutableListOf(
+                        nodeOf(
+                            11,
+                            mutableListOf(
+                                leafOf(111)
+                            )
+                        ),
+                        leafOf(12),
+                        leafOf(13)
+                    )
+                ),
+                nodeOf(
+                    11,
+                    mutableListOf(
+                        leafOf(111)
+                    )
+                ),
+                leafOf(111),
+                leafOf(12),
+                leafOf(13)
+            )
         }
     }
 
