@@ -18,7 +18,7 @@ class TreeNodeTest : DescribeSpec({
                     ),
                     leafOf(12)
                 )
-            )
+            ) as MutableTreeNode<Int> // TODO
 
             val indicesList = mutableListOf<List<Int>>()
 

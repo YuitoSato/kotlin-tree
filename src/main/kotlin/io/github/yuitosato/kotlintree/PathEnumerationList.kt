@@ -24,14 +24,14 @@ class PathEnumerationList<ID, VALUE> private constructor(
      * The result contains tree nodes and a list of parent node not found
      */
     fun toTreeNode(): PathEnumerationListToTreeNodeParseResult<ID, VALUE> {
-        val pathToTreeNodeMap = mutableMapOf<List<ID>, TreeNode<VALUE>>()
-        val rootTreeNodes = mutableListOf<TreeNode<VALUE>>()
+        val pathToTreeNodeMap = mutableMapOf<List<ID>, MutableTreeNode<VALUE>>()
+        val rootTreeNodes = mutableListOf<MutableTreeNode<VALUE>>()
         val parentNodeNotFoundList = mutableListOf<PathEnumerationListItem<ID, VALUE>>()
 
         this.sortedBy { it.getLevel() }.forEach { listItem ->
             val level = listItem.getLevel()
             if (level == 0) {
-                val treeNode = leafOf(listItem.value)
+                val treeNode = MutableTreeNode.of(listItem.value)
                 rootTreeNodes.add(treeNode)
                 pathToTreeNodeMap[listItem.path] = treeNode
             } else {
@@ -40,7 +40,7 @@ class PathEnumerationList<ID, VALUE> private constructor(
                 if (parentTreeNode == null) {
                     parentNodeNotFoundList.add(listItem)
                 }
-                val treeNode = leafOf(listItem.value)
+                val treeNode = MutableTreeNode.of(listItem.value)
                 parentTreeNode?.children?.add(treeNode)
                 pathToTreeNodeMap[listItem.path] = treeNode
             }
@@ -67,7 +67,8 @@ class PathEnumerationList<ID, VALUE> private constructor(
             treeNode: TreeNode<VALUE>
         ): PathEnumerationList<ID, VALUE> {
             val list =
-                treeNode.foldNodeInternal(emptyList<PathEnumerationListItem<ID, VALUE>>()) { acc, node, indices ->
+                // TODO
+                (treeNode as MutableTreeNode).foldNodeInternal(emptyList<PathEnumerationListItem<ID, VALUE>>()) { acc, node, indices ->
                     val path = (0..indices.size).mapNotNull { level ->
                         treeNode.getOrNull(indices.take(level))?.let { getNodeId(it.value) }
                     }

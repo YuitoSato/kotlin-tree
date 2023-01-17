@@ -2,36 +2,153 @@ package io.github.yuitosato.kotlintree
 
 import java.util.Stack
 
-/**
- * Class for Multi-way Trees
- */
-class TreeNode<T> private constructor(
-    val value: T,
-    val children: MutableList<TreeNode<T>>
-) {
+sealed interface TreeNode<T> {
+    val value: T
+    val children: List<TreeNode<T>>
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
      */
-    fun <S> foldNode(initial: S, operation: (acc: S, treeNode: TreeNode<T>) -> S): S =
+    fun <S> foldNode(initial: S, operation: (acc: S, treeNode: TreeNode<T>) -> S): S
+
+    /**
+     * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each element by depth-first-search.
+     */
+    fun <S> fold(initial: S, operation: (acc: S, element: T) -> S): S
+
+    /**
+     * Returns a tree node containing the results of applying the given [transform] function
+     * to each tree node in the original tree node by depth-first-search.
+     */
+    fun <S> mapNode(transform: (TreeNode<T>) -> S): TreeNode<S>
+
+    /**
+     * Returns a tree node containing the results of applying the given [transform] function
+     * to each element in the original tree node by depth-first-search.
+     */
+    fun <S> map(transform: (T) -> S): TreeNode<S>
+
+    /**
+     * Performs the given [action] on each tree node.
+     */
+    fun <S> forEachNode(action: (TreeNode<T>) -> S)
+
+    /**
+     * Performs the given [action] on each element.
+     */
+    fun <S> forEach(action: (T) -> S)
+
+    /**
+     * Returns a tree node containing only tree nodes matching the given [predicate].
+     */
+    fun filterNode(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>?
+
+    /**
+     * Returns a tree node containing only elements matching the given [predicate].
+     */
+    fun filter(predicate: (T) -> Boolean): TreeNode<T>?
+
+    /**
+     * Returns tree nodes matching the given [predicate].
+     */
+    fun findNode(predicate: (TreeNode<T>) -> Boolean): List<TreeNode<T>>
+
+    /**
+     * Returns tree nodes matching the given [predicate].
+     */
+    fun find(predicate: (T) -> Boolean): List<TreeNode<T>>
+
+    /**
+     * Returns a tree node containing the results of applying the given [transform] function to each element in the original tree node and flatten the nodes.
+     * See also [flatten]
+     */
+    fun <S> flatMapNode(prepend: Boolean, transform: (TreeNode<T>) -> TreeNode<S>): TreeNode<S>
+
+    /**
+     * Returns a tree node containing the results of applying the given [transform] function to each node in the original tree node and flatten the nodes.
+     * See also [flatten]
+     */
+    fun <S> flatMap(prepend: Boolean, transform: (T) -> TreeNode<S>): TreeNode<S>
+
+    /**
+     * Returns a tree node at the given [indices] or `null` if the [indices] is out of bounds of this tree node.
+     *
+     * Returns the top of the tree node if an empty indices is received.
+     * emptyList -> Returns the top of the node
+     * listOf(1) -> Returns the second child node of the top of the node.
+     * listOf(1, 0) -> Returns the first child node of the second child node of the top of the node.
+     */
+    fun getOrNull(indices: List<Int>): TreeNode<T>?
+
+    /**
+     * Returns a tree node with indices.
+     */
+    fun withIndices(): TreeNode<ValueWithIndices<T>>
+
+    /**
+     * Returns a tree node with zero-based levels.
+     */
+    fun withLevel(): TreeNode<ValueWithLevel<T>>
+
+    /**
+     * Flattens a tree node and returns a flat list of elements.
+     */
+    fun toFlatList(): List<T>
+
+    /**
+     * Flattens a tree node and returns a flat list of nodes.
+     */
+    fun toFlatListNode(): List<TreeNode<T>>
+
+    companion object {
+
+        fun <T> of(value: T, children: List<TreeNode<T>>): TreeNode<T> =
+            MutableTreeNode.of(value, children.toMutableList() as MutableList<MutableTreeNode<T>>) // TODO
+
+        fun <T> of(value: T): MutableTreeNode<T> = MutableTreeNode.of(value, mutableListOf())
+    }
+}
+
+/**
+ * Flatten a nested tree node.
+ * If [prepend] is true, child nodes in each element are prepended to each node.
+ */
+fun <T> TreeNode<TreeNode<T>>.flatten(prepend: Boolean): TreeNode<T> {
+    if (this is MutableTreeNode) {
+        return (this as MutableTreeNode<MutableTreeNode<T>>).flatten(prepend)
+    } else throw Exception("TODO")
+}
+
+/**
+ * Class for Multi-way Trees
+ */
+class MutableTreeNode<T> private constructor(
+    override val value: T,
+    override val children: MutableList<MutableTreeNode<T>>
+) : TreeNode<T> {
+
+    /**
+     * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
+     */
+    override fun <S> foldNode(initial: S, operation: (acc: S, treeNode: TreeNode<T>) -> S): S =
         foldNodeInternal(initial) { acc, treeNode, _ -> operation(acc, treeNode) }
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each element by depth-first-search.
      */
-    fun <S> fold(initial: S, operation: (acc: S, element: T) -> S): S =
+    override fun <S> fold(initial: S, operation: (acc: S, element: T) -> S): S =
         foldNode(initial) { acc, treeNode -> operation(acc, treeNode.value) }
 
     /**
      * Returns a tree node containing the results of applying the given [transform] function
      * to each tree node in the original tree node by depth-first-search.
      */
-    fun <S> mapNode(transform: (TreeNode<T>) -> S): TreeNode<S> {
-        val initial: TreeNode<S> = leafOf(transform(this))
+    override fun <S> mapNode(transform: (TreeNode<T>) -> S): MutableTreeNode<S> {
+        val initial = of(transform(this))
         return foldNodeInternal(initial) { acc, treeNode, indices ->
             val level = indices.size
             if (level == 0) acc else {
-                val newTreeNode = leafOf(transform(treeNode))
+                val newTreeNode = of(transform(treeNode))
                 acc.getOrNull(indices.take(indices.size - 1))
                     ?.children?.add(newTreeNode)
                 acc
@@ -43,28 +160,28 @@ class TreeNode<T> private constructor(
      * Returns a tree node containing the results of applying the given [transform] function
      * to each element in the original tree node by depth-first-search.
      */
-    fun <S> map(transform: (T) -> S): TreeNode<S> = mapNode { treeNode -> transform(treeNode.value) }
+    override fun <S> map(transform: (T) -> S): MutableTreeNode<S> = mapNode { treeNode -> transform(treeNode.value) }
 
     /**
      * Performs the given [action] on each tree node.
      */
-    fun <S> forEachNode(action: (TreeNode<T>) -> S) {
+    override fun <S> forEachNode(action: (TreeNode<T>) -> S) {
         mapNode(action)
     }
 
     /**
      * Performs the given [action] on each element.
      */
-    fun <S> forEach(action: (T) -> S) = forEachNode { treeNode -> action(treeNode.value) }
+    override fun <S> forEach(action: (T) -> S) = forEachNode { treeNode -> action(treeNode.value) }
 
     /**
      * Returns a tree node containing only tree nodes matching the given [predicate].
      */
-    fun filterNode(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>? {
-        val initial: TreeNode<T>? = null
+    override fun filterNode(predicate: (TreeNode<T>) -> Boolean): MutableTreeNode<T>? {
+        val initial: MutableTreeNode<T>? = null
         return foldNodeInternal(initial) { acc, treeNode, indices ->
             val condition = predicate(treeNode)
-            val newTreeNode = leafOf(treeNode.value)
+            val newTreeNode = of(treeNode.value)
             when {
                 !condition -> acc
                 acc == null -> newTreeNode
@@ -80,14 +197,14 @@ class TreeNode<T> private constructor(
     /**
      * Returns a tree node containing only elements matching the given [predicate].
      */
-    fun filter(predicate: (T) -> Boolean): TreeNode<T>? =
+    override fun filter(predicate: (T) -> Boolean): MutableTreeNode<T>? =
         filterNode { treeNode -> predicate(treeNode.value) }
 
     /**
      * Returns tree nodes matching the given [predicate].
      */
-    fun findNode(predicate: (TreeNode<T>) -> Boolean): List<TreeNode<T>> {
-        val initial: List<TreeNode<T>> = listOf()
+    override fun findNode(predicate: (TreeNode<T>) -> Boolean): List<MutableTreeNode<T>> {
+        val initial: List<MutableTreeNode<T>> = listOf()
         return foldNodeInternal(initial) { acc, treeNode, _ ->
             if (predicate(treeNode)) {
                 acc.plus(treeNode)
@@ -98,20 +215,21 @@ class TreeNode<T> private constructor(
     /**
      * Returns tree nodes matching the given [predicate].
      */
-    fun find(predicate: (T) -> Boolean): List<TreeNode<T>> = findNode { treeNode -> predicate(treeNode.value) }
+    override fun find(predicate: (T) -> Boolean): List<MutableTreeNode<T>> =
+        findNode { treeNode -> predicate(treeNode.value) }
 
     /**
      * Returns a tree node containing the results of applying the given [transform] function to each element in the original tree node and flatten the nodes.
      * See also [flatten]
      */
-    fun <S> flatMapNode(prepend: Boolean, transform: (TreeNode<T>) -> TreeNode<S>): TreeNode<S> =
-        mapNode(transform).flatten(prepend)
+    override fun <S> flatMapNode(prepend: Boolean, transform: (TreeNode<T>) -> TreeNode<S>): MutableTreeNode<S> =
+        mapNode(transform).flatten(prepend) as MutableTreeNode<S>
 
     /**
      * Returns a tree node containing the results of applying the given [transform] function to each node in the original tree node and flatten the nodes.
      * See also [flatten]
      */
-    fun <S> flatMap(prepend: Boolean, transform: (T) -> TreeNode<S>): TreeNode<S> =
+    override fun <S> flatMap(prepend: Boolean, transform: (T) -> TreeNode<S>): MutableTreeNode<S> =
         flatMapNode(prepend) { treeNode -> transform(treeNode.value) }
 
     /**
@@ -122,7 +240,7 @@ class TreeNode<T> private constructor(
      * listOf(1) -> Returns the second child node of the top of the node.
      * listOf(1, 0) -> Returns the first child node of the second child node of the top of the node.
      */
-    fun getOrNull(indices: List<Int>): TreeNode<T>? {
+    override fun getOrNull(indices: List<Int>): MutableTreeNode<T>? {
         var current = this
         indices.forEach { index ->
             val currentOpt = current.children.getOrNull(index) ?: return null
@@ -134,12 +252,12 @@ class TreeNode<T> private constructor(
     /**
      * Returns a tree node with indices.
      */
-    fun withIndices(): TreeNode<ValueWithIndices<T>> {
-        val initial = leafOf(ValueWithIndices(listOf(), value))
+    override fun withIndices(): MutableTreeNode<ValueWithIndices<T>> {
+        val initial = of(ValueWithIndices(listOf(), value))
         return foldNodeInternal(initial) { acc, treeNode, indices ->
             val level = indices.size
             if (level == 0) acc else {
-                val newTreeNode = leafOf(ValueWithIndices(indices, treeNode.value))
+                val newTreeNode = of(ValueWithIndices(indices, treeNode.value))
                 acc.getOrNull(indices.take(indices.size - 1))
                     ?.children?.add(newTreeNode)
                 acc
@@ -150,17 +268,19 @@ class TreeNode<T> private constructor(
     /**
      * Returns a tree node with zero-based levels.
      */
-    fun withLevel(): TreeNode<ValueWithLevel<T>> = withIndices().map { ValueWithLevel(it.indices.size, it.value) }
+    override fun withLevel(): MutableTreeNode<ValueWithLevel<T>> =
+        withIndices().map { ValueWithLevel(it.indices.size, it.value) }
 
     /**
      * Flattens a tree node and returns a flat list of elements.
      */
-    fun toFlatList(): List<T> = fold(emptyList()) { acc, element -> acc.plus(element) }
+    override fun toFlatList(): List<T> = fold(emptyList()) { acc, element -> acc.plus(element) }
 
     /**
      * Flattens a tree node and returns a flat list of nodes.
      */
-    fun toFlatListNode(): List<TreeNode<T>> = foldNode(emptyList()) { acc, element -> acc.plus(element) }
+    override fun toFlatListNode(): List<MutableTreeNode<T>> =
+        foldNode(emptyList()) { acc, node -> acc.plus(node as MutableTreeNode<T>) }
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
@@ -169,9 +289,9 @@ class TreeNode<T> private constructor(
      */
     internal fun <S> foldNodeInternal(
         initial: S,
-        operation: (acc: S, treeNode: TreeNode<T>, indices: List<Int>) -> S
+        operation: (acc: S, treeNode: MutableTreeNode<T>, indices: List<Int>) -> S
     ): S {
-        val nodeAndIndicesStack: Stack<Pair<TreeNode<T>, List<Int>>> = Stack()
+        val nodeAndIndicesStack: Stack<Pair<MutableTreeNode<T>, List<Int>>> = Stack()
         nodeAndIndicesStack += this to emptyList()
         var acc = initial
 
@@ -187,7 +307,10 @@ class TreeNode<T> private constructor(
 
     companion object {
 
-        fun <T> of(value: T, children: MutableList<TreeNode<T>>): TreeNode<T> = TreeNode(value, children)
+        fun <T> of(value: T, children: MutableList<MutableTreeNode<T>>): MutableTreeNode<T> =
+            MutableTreeNode(value, children)
+
+        fun <T> of(value: T): MutableTreeNode<T> = MutableTreeNode(value, mutableListOf())
     }
 
     override fun equals(other: Any?): Boolean {
@@ -217,8 +340,8 @@ class TreeNode<T> private constructor(
  * Flatten a nested tree node.
  * If [prepend] is true, child nodes in each element are prepended to each node.
  */
-fun <T> TreeNode<TreeNode<T>>.flatten(prepend: Boolean): TreeNode<T> {
-    val nodeAndIndicesStack: Stack<Pair<TreeNode<TreeNode<T>>, List<Int>>> = Stack()
+fun <T> MutableTreeNode<MutableTreeNode<T>>.flatten(prepend: Boolean): TreeNode<T> {
+    val nodeAndIndicesStack: Stack<Pair<MutableTreeNode<MutableTreeNode<T>>, List<Int>>> = Stack()
     val resultTree = this.value
     this.children.withIndex().reversed()
         .forEach { (index, childTreeNode) -> nodeAndIndicesStack += childTreeNode to emptyList<Int>().plus(index + if (prepend) resultTree.children.size else 0) }
