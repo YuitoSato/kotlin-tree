@@ -134,18 +134,33 @@ class TreeNode<T> private constructor(
     /**
      * Returns a tree node with indices.
      */
-    fun withIndices(): TreeNode<IndexedValue<T>> {
-        val initial = leafOf(IndexedValue(listOf(), value))
+    fun withIndices(): TreeNode<ValueWithIndices<T>> {
+        val initial = leafOf(ValueWithIndices(listOf(), value))
         return foldNodeInternal(initial) { acc, treeNode, indices ->
             val level = indices.size
             if (level == 0) acc else {
-                val newTreeNode = leafOf(IndexedValue(indices, treeNode.value))
+                val newTreeNode = leafOf(ValueWithIndices(indices, treeNode.value))
                 acc.getOrNull(indices.take(indices.size - 1))
                     ?.children?.add(newTreeNode)
                 acc
             }
         }
     }
+
+    /**
+     * Returns a tree node with zero-based levels.
+     */
+    fun withLevel(): TreeNode<ValueWithLevel<T>> = withIndices().map { ValueWithLevel(it.indices.size, it.value) }
+
+    /**
+     * Flattens a tree node and returns a flat list of elements.
+     */
+    fun toFlatList(): List<T> = fold(emptyList()) { acc, element -> acc.plus(element) }
+
+    /**
+     * Flattens a tree node and returns a flat list of nodes.
+     */
+    fun toFlatListNode(): List<TreeNode<T>> = foldNode(emptyList()) { acc, element -> acc.plus(element) }
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
@@ -222,7 +237,9 @@ fun <T> TreeNode<TreeNode<T>>.flatten(prepend: Boolean): TreeNode<T> {
 /**
  * Value with indices for TreeNode operations.
  */
-data class IndexedValue<T>(val indices: List<Int>, val value: T)
+data class ValueWithIndices<T>(val indices: List<Int>, val value: T)
+
+data class ValueWithLevel<T>(val level: Int, val value: T)
 
 /**
  * Returns a tree node. same as Tree.of.
