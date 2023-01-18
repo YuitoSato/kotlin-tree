@@ -87,8 +87,7 @@ class AdjacencyList<ID, VALUE> private constructor(
         ): AdjacencyList<ID, VALUE> {
             val initial = emptyList<AdjacencyListItem<ID, VALUE>>()
             return of(
-                // TODO
-                (treeNode as MutableTreeNode<VALUE>).foldNodeInternal(initial) { acc, node, indices ->
+                treeNode.asMutable().foldNodeInternal(initial) { acc, node, indices ->
                     val level = indices.size
                     val parentNode = if (level != 0) {
                         treeNode.getOrNull(indices.take(indices.size - 1))

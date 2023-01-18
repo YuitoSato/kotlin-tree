@@ -103,7 +103,7 @@ sealed interface TreeNode<T> {
     companion object {
 
         fun <T> of(value: T, children: List<TreeNode<T>>): TreeNode<T> =
-            MutableTreeNode.of(value, children.toMutableList() as MutableList<MutableTreeNode<T>>) // TODO
+            MutableTreeNode.of(value, children.map { it.asMutable() }.toMutableList())
 
         fun <T> of(value: T): MutableTreeNode<T> = MutableTreeNode.of(value, mutableListOf())
     }
@@ -115,9 +115,12 @@ sealed interface TreeNode<T> {
  */
 fun <T> TreeNode<TreeNode<T>>.flatten(prepend: Boolean): TreeNode<T> {
     if (this is MutableTreeNode) {
-        return (this as MutableTreeNode<MutableTreeNode<T>>).flatten(prepend)
+        return (this.map { it.asMutable() }.asMutable()).flatten(prepend)
     } else throw Exception("TODO")
 }
+
+internal fun <T> TreeNode<T>.asMutable(): MutableTreeNode<T> =
+    this as MutableTreeNode<T>
 
 /**
  * Class for Multi-way Trees
@@ -223,7 +226,7 @@ class MutableTreeNode<T> private constructor(
      * See also [flatten]
      */
     override fun <S> flatMapNode(prepend: Boolean, transform: (TreeNode<T>) -> TreeNode<S>): MutableTreeNode<S> =
-        mapNode(transform).flatten(prepend) as MutableTreeNode<S>
+        mapNode(transform).flatten(prepend).asMutable()
 
     /**
      * Returns a tree node containing the results of applying the given [transform] function to each node in the original tree node and flatten the nodes.
@@ -280,7 +283,7 @@ class MutableTreeNode<T> private constructor(
      * Flattens a tree node and returns a flat list of nodes.
      */
     override fun toFlatListNode(): List<MutableTreeNode<T>> =
-        foldNode(emptyList()) { acc, node -> acc.plus(node as MutableTreeNode<T>) }
+        foldNode(emptyList()) { acc, node -> acc.plus(node.asMutable()) }
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.

@@ -67,8 +67,7 @@ class PathEnumerationList<ID, VALUE> private constructor(
             treeNode: TreeNode<VALUE>
         ): PathEnumerationList<ID, VALUE> {
             val list =
-                // TODO
-                (treeNode as MutableTreeNode).foldNodeInternal(emptyList<PathEnumerationListItem<ID, VALUE>>()) { acc, node, indices ->
+                treeNode.asMutable().foldNodeInternal(emptyList<PathEnumerationListItem<ID, VALUE>>()) { acc, node, indices ->
                     val path = (0..indices.size).mapNotNull { level ->
                         treeNode.getOrNull(indices.take(level))?.let { getNodeId(it.value) }
                     }
@@ -92,7 +91,7 @@ class PathEnumerationList<ID, VALUE> private constructor(
 }
 
 /**
- * Class for a item in a path enumeration list.
+ * Class for an item in a path enumeration list.
  * A path in a path enumeration list item must not be empty.
  */
 data class PathEnumerationListItem<ID, VALUE>(

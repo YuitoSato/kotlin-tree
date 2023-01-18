@@ -18,7 +18,7 @@ class TreeNodeTest : DescribeSpec({
                     ),
                     leafOf(12)
                 )
-            ) as MutableTreeNode<Int> // TODO
+            ).asMutable()
 
             val indicesList = mutableListOf<List<Int>>()
 
@@ -860,6 +860,12 @@ class TreeNodeTest : DescribeSpec({
     describe("leafOf") {
         it("returns a tree node with empty children") {
             leafOf(1) shouldBe TreeNode.of(1, mutableListOf())
+        }
+    }
+
+    describe("of") {
+        it("returns a tree node with empty children") {
+            TreeNode.of(1) shouldBe TreeNode.of(1, mutableListOf())
         }
     }
 
