@@ -9,7 +9,7 @@ Easy to convert trees to other tree models, Path Enumeration Models and Adjacenc
 ### Gradle
 
 ```kts
-implementation("io.github.yuitosato:kotlin-tree:1.2.0")
+implementation("io.github.yuitosato:kotlin-tree:1.3.0")
 ```
 
 ### Maven
@@ -18,7 +18,7 @@ implementation("io.github.yuitosato:kotlin-tree:1.2.0")
 <dependency>
     <groupId>io.github.yuitosato</groupId>
     <artifactId>kotlin-tree</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
@@ -30,10 +30,10 @@ TreeNode has the value property, which is the content of the node, and the child
 nodes.
 
 ```kt
-class TreeNode<T> private constructor(
-    val value: T,
-    val children: MutableList<TreeNode<T>>
-)
+interface TreeNode<T> {
+    val value: T
+    val children: List<TreeNode<T>>
+}
 ```
 
 ## Quick Start
@@ -43,10 +43,10 @@ You can create a tree node instance and operate the contents of nodes easily and
 ```kt
 val treeNode: TreeNode<Int> = nodeOf(
     1,
-    mutableListOf(
+    listOf(
         nodeOf(
             11,
-            mutableList(
+            listOf(
                 leafOf(111),
                 leafOf(112)
             )
@@ -80,10 +80,10 @@ These methods are named xxxNode, mapNode, filterNode, etc.
 ```kt
 val treeNode: TreeNode<Int> = nodeOf(
     1,
-    mutableListOf(
+    listOf(
         nodeOf(
             11,
-            mutableList(
+            listOf(
                 leafOf(111),
                 leafOf(112)
             )
@@ -178,10 +178,10 @@ val (treeNodes, parentNodeNotFoundList) = adjacencyList.toTreeNode()
 ```kt
 val treeNode = nodeOf(
     1,
-    mutableListOf(
+    listOf(
         nodeOf(
             11,
-            mutableList(
+            listOf(
                 leafOf(111),
                 leafOf(112)
             )
@@ -230,10 +230,10 @@ val (treeNodes, parentNodeNotFoundList) =
 ```kt
 val treeNode = nodeOf(
     1,
-    mutableListOf(
+    listOf(
         nodeOf(
             11,
-            mutableList(
+            listOf(
                 leafOf(111),
                 leafOf(112)
             )
