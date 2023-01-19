@@ -261,11 +261,10 @@ class MutableTreeNode<T> private constructor(
                 acc.plus(treeNode.value.toString())
             } else {
                 val nextNode = this.getOrNull(indices.take(indices.size - 1).plus(indices.last() + 1))
+                val prefix = (0 until level - 1).joinToString("") { "│   " }
                 if (nextNode != null) {
-                    val prefix = (0 until level - 1).map { "│   " }.joinToString("")
                     acc.plus(prefix + "├── " + treeNode.value.toString())
                 } else {
-                    val prefix = (0 until level - 1).map { "│   " }.joinToString("")
                     acc.plus(prefix + "└── " + treeNode.value.toString())
                 }
             }
