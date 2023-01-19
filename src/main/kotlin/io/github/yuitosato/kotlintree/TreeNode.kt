@@ -2,6 +2,9 @@ package io.github.yuitosato.kotlintree
 
 import java.util.Stack
 
+/**
+ * Class for Multi-way Trees
+ */
 sealed interface TreeNode<T> {
     val value: T
     val children: List<TreeNode<T>>
