@@ -108,7 +108,7 @@ sealed interface TreeNode<T> {
         fun <T> of(value: T, children: List<TreeNode<T>>): TreeNode<T> =
             MutableTreeNode.of(value, children.map { it.asMutable() }.toMutableList())
 
-        fun <T> of(value: T): MutableTreeNode<T> = MutableTreeNode.of(value, mutableListOf())
+        fun <T> of(value: T): MutableTreeNode<T> = MutableTreeNode.of(value)
     }
 }
 
@@ -321,4 +321,4 @@ fun <T> nodeOf(value: T, children: List<TreeNode<T>>): TreeNode<T> = TreeNode.of
 /**
  * Returns a leaf that does not have any children
  */
-fun <T> leafOf(value: T): TreeNode<T> = TreeNode.of(value, mutableListOf())
+fun <T> leafOf(value: T): TreeNode<T> = TreeNode.of(value)

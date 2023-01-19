@@ -9,10 +9,10 @@ class TreeNodeTest : DescribeSpec({
         it("folds a tree node and returns the sums of each node with indices") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -43,10 +43,10 @@ class TreeNodeTest : DescribeSpec({
         it("folds a tree node and returns the sums of each node") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -68,10 +68,10 @@ class TreeNodeTest : DescribeSpec({
         it("folds a tree node and returns the flatten list") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -91,10 +91,10 @@ class TreeNodeTest : DescribeSpec({
         it("applies function to each node in tree node") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -110,10 +110,10 @@ class TreeNodeTest : DescribeSpec({
 
             val expected = nodeOf(
                 135,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         122,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -129,10 +129,10 @@ class TreeNodeTest : DescribeSpec({
         it("applies function to each values in tree node") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -144,10 +144,10 @@ class TreeNodeTest : DescribeSpec({
 
             val expected = nodeOf(
                 2,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         22,
-                        mutableListOf(
+                        listOf(
                             leafOf(222)
                         )
                     ),
@@ -163,10 +163,10 @@ class TreeNodeTest : DescribeSpec({
         it("applies function to each values in tree node") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -184,7 +184,7 @@ class TreeNodeTest : DescribeSpec({
                 )
             }
 
-            val expected = mutableListOf(135, 122, 111, 12)
+            val expected = listOf(135, 122, 111, 12)
 
             actual shouldBe expected
         }
@@ -194,10 +194,10 @@ class TreeNodeTest : DescribeSpec({
         it("applies function to each values in tree node") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -218,10 +218,10 @@ class TreeNodeTest : DescribeSpec({
         it("filters a tree node that matches a condition") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -236,10 +236,10 @@ class TreeNodeTest : DescribeSpec({
 
             val expected = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     )
@@ -252,10 +252,10 @@ class TreeNodeTest : DescribeSpec({
         it("returns null if the top of the tree node does not match a condition.") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -273,10 +273,10 @@ class TreeNodeTest : DescribeSpec({
         it("filters a tree node that matches a condition") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -289,10 +289,10 @@ class TreeNodeTest : DescribeSpec({
 
             val expected = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf()
+                        listOf()
                     ),
                     leafOf(12)
                 )
@@ -306,10 +306,10 @@ class TreeNodeTest : DescribeSpec({
         it("find tree nodes that matches the condition") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -325,10 +325,10 @@ class TreeNodeTest : DescribeSpec({
             val expected = listOf(
                 nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(111)
                             )
                         ),
@@ -338,7 +338,7 @@ class TreeNodeTest : DescribeSpec({
                 ),
                 nodeOf(
                     11,
-                    mutableListOf(
+                    listOf(
                         leafOf(111)
                     )
                 ),
@@ -352,10 +352,10 @@ class TreeNodeTest : DescribeSpec({
         it("returns an empty list if that the tree node does not match the condition.") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -373,10 +373,10 @@ class TreeNodeTest : DescribeSpec({
         it("find tree nodes that matches a condition") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -390,10 +390,10 @@ class TreeNodeTest : DescribeSpec({
             val expected = listOf(
                 nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(111)
                             )
                         ),
@@ -403,7 +403,7 @@ class TreeNodeTest : DescribeSpec({
                 ),
                 nodeOf(
                     11,
-                    mutableListOf(
+                    listOf(
                         leafOf(111)
                     )
                 ),
@@ -420,10 +420,10 @@ class TreeNodeTest : DescribeSpec({
             it("returns a tree node containing the results of applying the given [transform] function and prepend a transformed node to the original tree") {
                 val tree = nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(111)
                             )
                         ),
@@ -431,18 +431,18 @@ class TreeNodeTest : DescribeSpec({
                         leafOf(13)
                     )
                 )
-                val actual = tree.flatMapNode(true) { nodeOf(it.value, mutableListOf(leafOf(0))) }
+                val actual = tree.flatMapNode(true) { nodeOf(it.value, listOf(leafOf(0))) }
                 actual shouldBe nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         leafOf(0),
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(0),
                                 nodeOf(
                                     111,
-                                    mutableListOf(
+                                    listOf(
                                         leafOf(0)
                                     )
                                 )
@@ -450,13 +450,13 @@ class TreeNodeTest : DescribeSpec({
                         ),
                         nodeOf(
                             12,
-                            mutableListOf(
+                            listOf(
                                 leafOf(0)
                             )
                         ),
                         nodeOf(
                             13,
-                            mutableListOf(
+                            listOf(
                                 leafOf(0)
                             )
                         )
@@ -469,10 +469,10 @@ class TreeNodeTest : DescribeSpec({
             it("returns a tree node containing the results of applying the given [transform] function and add a transformed node to the original tree") {
                 val tree = nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(111)
                             )
                         ),
@@ -480,16 +480,16 @@ class TreeNodeTest : DescribeSpec({
                         leafOf(13)
                     )
                 )
-                val actual = tree.flatMapNode(false) { nodeOf(it.value, mutableListOf(leafOf(0))) }
+                val actual = tree.flatMapNode(false) { nodeOf(it.value, listOf(leafOf(0))) }
                 actual shouldBe nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 nodeOf(
                                     111,
-                                    mutableListOf(
+                                    listOf(
                                         leafOf(0)
                                     )
                                 ),
@@ -498,13 +498,13 @@ class TreeNodeTest : DescribeSpec({
                         ),
                         nodeOf(
                             12,
-                            mutableListOf(
+                            listOf(
                                 leafOf(0)
                             )
                         ),
                         nodeOf(
                             13,
-                            mutableListOf(
+                            listOf(
                                 leafOf(0)
                             )
                         ),
@@ -520,10 +520,10 @@ class TreeNodeTest : DescribeSpec({
             it("returns a tree node containing the results of applying the given [transform] function and prepend a transformed element to the original tree") {
                 val tree = nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(111)
                             )
                         ),
@@ -531,18 +531,18 @@ class TreeNodeTest : DescribeSpec({
                         leafOf(13)
                     )
                 )
-                val actual = tree.flatMap(true) { nodeOf(it, mutableListOf(leafOf(0))) }
+                val actual = tree.flatMap(true) { nodeOf(it, listOf(leafOf(0))) }
                 actual shouldBe nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         leafOf(0),
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(0),
                                 nodeOf(
                                     111,
-                                    mutableListOf(
+                                    listOf(
                                         leafOf(0)
                                     )
                                 )
@@ -550,13 +550,13 @@ class TreeNodeTest : DescribeSpec({
                         ),
                         nodeOf(
                             12,
-                            mutableListOf(
+                            listOf(
                                 leafOf(0)
                             )
                         ),
                         nodeOf(
                             13,
-                            mutableListOf(
+                            listOf(
                                 leafOf(0)
                             )
                         )
@@ -569,10 +569,10 @@ class TreeNodeTest : DescribeSpec({
             it("returns a tree node containing the results of applying the given [transform] function and add a transformed element to the original tree") {
                 val tree = nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(111)
                             )
                         ),
@@ -580,16 +580,16 @@ class TreeNodeTest : DescribeSpec({
                         leafOf(13)
                     )
                 )
-                val actual = tree.flatMap(false) { nodeOf(it, mutableListOf(leafOf(0))) }
+                val actual = tree.flatMap(false) { nodeOf(it, listOf(leafOf(0))) }
                 actual shouldBe nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 nodeOf(
                                     111,
-                                    mutableListOf(
+                                    listOf(
                                         leafOf(0)
                                     )
                                 ),
@@ -598,13 +598,13 @@ class TreeNodeTest : DescribeSpec({
                         ),
                         nodeOf(
                             12,
-                            mutableListOf(
+                            listOf(
                                 leafOf(0)
                             )
                         ),
                         nodeOf(
                             13,
-                            mutableListOf(
+                            listOf(
                                 leafOf(0)
                             )
                         ),
@@ -619,10 +619,10 @@ class TreeNodeTest : DescribeSpec({
         it("should return a tree node with zero-based levels.") {
             nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -631,10 +631,10 @@ class TreeNodeTest : DescribeSpec({
                 )
             ).withLevel() shouldBe nodeOf(
                 ValueWithLevel(0, 1),
-                mutableListOf(
+                listOf(
                     nodeOf(
                         ValueWithLevel(1, 11),
-                        mutableListOf(
+                        listOf(
                             leafOf(ValueWithLevel(2, 111))
                         )
                     ),
@@ -649,10 +649,10 @@ class TreeNodeTest : DescribeSpec({
         it("should flatten a tree node and return a flat list of elements ") {
             nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -673,10 +673,10 @@ class TreeNodeTest : DescribeSpec({
         it("should flatten a tree node and return a flat list of nodes") {
             nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
@@ -686,10 +686,10 @@ class TreeNodeTest : DescribeSpec({
             ).toFlatListNode() shouldBe listOf(
                 nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(111)
                             )
                         ),
@@ -699,7 +699,7 @@ class TreeNodeTest : DescribeSpec({
                 ),
                 nodeOf(
                     11,
-                    mutableListOf(
+                    listOf(
                         leafOf(111)
                     )
                 ),
@@ -716,30 +716,30 @@ class TreeNodeTest : DescribeSpec({
                 nodeOf(
                     nodeOf(
                         1,
-                        mutableListOf(
+                        listOf(
                             leafOf(11)
                         )
                     ),
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             nodeOf(
                                 2,
-                                mutableListOf(
+                                listOf(
                                     leafOf(21),
                                     leafOf(22)
                                 )
                             ),
-                            mutableListOf(
+                            listOf(
                                 nodeOf(
                                     nodeOf(
                                         3,
-                                        mutableListOf(
+                                        listOf(
                                             leafOf(31),
                                             leafOf(32),
                                             leafOf(33)
                                         )
                                     ),
-                                    mutableListOf(
+                                    listOf(
                                         leafOf(leafOf(4))
                                     )
                                 )
@@ -748,16 +748,16 @@ class TreeNodeTest : DescribeSpec({
                     )
                 ).flatten(true) shouldBe nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         leafOf(11),
                         nodeOf(
                             2,
-                            mutableListOf(
+                            listOf(
                                 leafOf(21),
                                 leafOf(22),
                                 nodeOf(
                                     3,
-                                    mutableListOf(
+                                    listOf(
                                         leafOf(31),
                                         leafOf(32),
                                         leafOf(33),
@@ -776,30 +776,30 @@ class TreeNodeTest : DescribeSpec({
                 nodeOf(
                     nodeOf(
                         1,
-                        mutableListOf(
+                        listOf(
                             leafOf(11)
                         )
                     ),
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             nodeOf(
                                 2,
-                                mutableListOf(
+                                listOf(
                                     leafOf(21),
                                     leafOf(22)
                                 )
                             ),
-                            mutableListOf(
+                            listOf(
                                 nodeOf(
                                     nodeOf(
                                         3,
-                                        mutableListOf(
+                                        listOf(
                                             leafOf(31),
                                             leafOf(32),
                                             leafOf(33)
                                         )
                                     ),
-                                    mutableListOf(
+                                    listOf(
                                         leafOf(leafOf(4))
                                     )
                                 )
@@ -808,13 +808,13 @@ class TreeNodeTest : DescribeSpec({
                     )
                 ).flatten(false) shouldBe nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             2,
-                            mutableListOf(
+                            listOf(
                                 nodeOf(
                                     3,
-                                    mutableListOf(
+                                    listOf(
                                         leafOf(4),
                                         leafOf(31),
                                         leafOf(32),
@@ -836,20 +836,20 @@ class TreeNodeTest : DescribeSpec({
         it("returns a tree node") {
             nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     leafOf(11),
                     leafOf(12)
                 )
             ) shouldBe TreeNode.of(
                 1,
-                mutableListOf(
+                listOf(
                     TreeNode.of(
                         11,
-                        mutableListOf()
+                        listOf()
                     ),
                     TreeNode.of(
                         12,
-                        mutableListOf()
+                        listOf()
                     )
                 )
 
@@ -859,13 +859,13 @@ class TreeNodeTest : DescribeSpec({
 
     describe("leafOf") {
         it("returns a tree node with empty children") {
-            leafOf(1) shouldBe TreeNode.of(1, mutableListOf())
+            leafOf(1) shouldBe TreeNode.of(1, listOf())
         }
     }
 
     describe("of") {
         it("returns a tree node with empty children") {
-            TreeNode.of(1) shouldBe TreeNode.of(1, mutableListOf())
+            TreeNode.of(1) shouldBe TreeNode.of(1, listOf())
         }
     }
 
@@ -873,10 +873,10 @@ class TreeNodeTest : DescribeSpec({
         it("returns a tree node with indices") {
             val tree = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111),
                             leafOf(112)
                         )
@@ -886,10 +886,10 @@ class TreeNodeTest : DescribeSpec({
             )
             tree.withIndices() shouldBe nodeOf(
                 ValueWithIndices(listOf(), 1),
-                mutableListOf(
+                listOf(
                     nodeOf(
                         ValueWithIndices(listOf(0), 11),
-                        mutableListOf(
+                        listOf(
                             leafOf(ValueWithIndices(listOf(0, 0), 111)),
                             leafOf(ValueWithIndices(listOf(0, 1), 112))
                         )

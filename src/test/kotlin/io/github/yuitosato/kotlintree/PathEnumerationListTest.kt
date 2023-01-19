@@ -38,10 +38,10 @@ class PathEnumerationListTest : DescribeSpec({
             val expectedTreeNodes = listOf(
                 nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(111)
                             )
                         ),
@@ -50,10 +50,10 @@ class PathEnumerationListTest : DescribeSpec({
                 ),
                 nodeOf(
                     2,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(
+                            listOf(
                                 leafOf(211)
                             )
                         ),
@@ -77,10 +77,10 @@ class PathEnumerationListTest : DescribeSpec({
         it("converts a tree node to a path enumeration list") {
             val treeNode = nodeOf(
                 1,
-                mutableListOf(
+                listOf(
                     nodeOf(
                         11,
-                        mutableListOf(
+                        listOf(
                             leafOf(111)
                         )
                     ),
