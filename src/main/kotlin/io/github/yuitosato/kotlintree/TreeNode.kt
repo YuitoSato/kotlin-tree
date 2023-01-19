@@ -103,6 +103,11 @@ sealed interface TreeNode<T> {
      */
     fun toFlatListNode(): List<TreeNode<T>>
 
+    /**
+     * Returns Returns the size of nodes.
+     */
+    fun size(): Int
+
     companion object {
 
         fun <T> of(value: T, children: List<TreeNode<T>>): TreeNode<T> =
@@ -242,6 +247,8 @@ class MutableTreeNode<T> private constructor(
 
     override fun toFlatListNode(): List<MutableTreeNode<T>> =
         foldNode(emptyList()) { acc, node -> acc.plus(node.asMutable()) }
+
+    override fun size(): Int = foldNodeInternal(0) { acc, _, _ -> acc + 1 }
 
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
