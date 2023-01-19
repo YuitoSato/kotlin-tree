@@ -29,13 +29,13 @@ class AdjacencyList<ID, VALUE> private constructor(
         val parentNodeIdToChildren = list.groupBy { it.parentNodeId }.toMutableMap()
 
         fun buildTree(root: AdjacencyListItem<ID, VALUE>): TreeNode<VALUE>? {
-            var tree: TreeNode<VALUE>? = null
+            var tree: MutableTreeNode<VALUE>? = null
             val itemAndIndicesStack: Stack<Pair<AdjacencyListItem<ID, VALUE>, List<Int>>> = Stack()
             itemAndIndicesStack += root to emptyList()
 
             while (itemAndIndicesStack.isNotEmpty()) {
                 val (listItem, indices) = itemAndIndicesStack.pop()
-                val newTreeNode = leafOf(listItem.value)
+                val newTreeNode = MutableTreeNode.of(listItem.value)
                 val level = indices.size
                 if (level == 0) {
                     tree = newTreeNode
@@ -87,7 +87,7 @@ class AdjacencyList<ID, VALUE> private constructor(
         ): AdjacencyList<ID, VALUE> {
             val initial = emptyList<AdjacencyListItem<ID, VALUE>>()
             return of(
-                treeNode.foldNodeInternal(initial) { acc, node, indices ->
+                treeNode.asMutable().foldNodeInternal(initial) { acc, node, indices ->
                     val level = indices.size
                     val parentNode = if (level != 0) {
                         treeNode.getOrNull(indices.take(indices.size - 1))

@@ -37,10 +37,10 @@ class AdjacencyListTest : DescribeSpec({
             val expected = listOf(
                 nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(leafOf(111))
+                            listOf(leafOf(111))
                         ),
                         leafOf(12)
                     )
@@ -62,10 +62,10 @@ class AdjacencyListTest : DescribeSpec({
                 getSelfNodeId = { it },
                 nodeOf(
                     1,
-                    mutableListOf(
+                    listOf(
                         nodeOf(
                             11,
-                            mutableListOf(leafOf(111))
+                            listOf(leafOf(111))
                         ),
                         leafOf(12)
                     )
