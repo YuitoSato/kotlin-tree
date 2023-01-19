@@ -126,6 +126,21 @@ internal fun <T> TreeNode<T>.asMutable(): MutableTreeNode<T> =
     this as MutableTreeNode<T>
 
 /**
+ * Makes a deep copy of a node and returns it as MutableTreeNode.
+ */
+fun <T> TreeNode<T>.toMutable(): MutableTreeNode<T> {
+    return this.asMutable().foldNodeInternal(MutableTreeNode.of(this.value)) { acc, treeNode, indices ->
+        val level = indices.size
+        if (level == 0) acc else {
+            val newTreeNode = MutableTreeNode.of(treeNode.value)
+            acc.getOrNull(indices.take(indices.size - 1))
+                ?.children?.add(newTreeNode)
+            acc
+        }
+    }
+}
+
+/**
  * Mutable TreeNode
  */
 class MutableTreeNode<T> private constructor(

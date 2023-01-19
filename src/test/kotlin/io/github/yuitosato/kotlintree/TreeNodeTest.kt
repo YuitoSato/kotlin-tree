@@ -832,6 +832,27 @@ class TreeNodeTest : DescribeSpec({
         }
     }
 
+    describe("toMutable") {
+        it("makes a deep copy of a node and returns it as MutableTreeNode.") {
+            val node = nodeOf(
+                1,
+                listOf(
+                    nodeOf(
+                        11,
+                        listOf(
+                            leafOf(111)
+                        )
+                    ),
+                    leafOf(12),
+                    leafOf(13)
+                )
+            )
+            val mutableNode = node.toMutable()
+
+            mutableNode shouldBe node
+        }
+    }
+
     describe("nodeOf") {
         it("returns a tree node") {
             nodeOf(
