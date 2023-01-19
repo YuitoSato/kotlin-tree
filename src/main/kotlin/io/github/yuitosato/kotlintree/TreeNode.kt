@@ -108,6 +108,11 @@ sealed interface TreeNode<T> {
      */
     fun size(): Int
 
+    /**
+     * Returns the formatted string of a node
+     */
+    fun toFormattedString(): String
+
     companion object {
 
         fun <T> of(value: T, children: List<TreeNode<T>>): TreeNode<T> =
@@ -247,6 +252,24 @@ class MutableTreeNode<T> private constructor(
 
     override fun toFlatListNode(): List<MutableTreeNode<T>> =
         foldNode(emptyList()) { acc, node -> acc.plus(node.asMutable()) }
+
+    override fun toFormattedString(): String {
+        return this.foldNodeInternal(emptyList<String>()) { acc, treeNode, indices ->
+            val level = indices.size
+
+            if (level == 0) {
+                acc.plus(treeNode.value.toString())
+            } else {
+                val nextNode = this.getOrNull(indices.take(indices.size - 1).plus(indices.last() + 1))
+                val prefix = (0 until level - 1).joinToString("") { "│   " }
+                if (nextNode != null) {
+                    acc.plus(prefix + "├── " + treeNode.value.toString())
+                } else {
+                    acc.plus(prefix + "└── " + treeNode.value.toString())
+                }
+            }
+        }.joinToString("\n")
+    }
 
     override fun size(): Int = foldNodeInternal(0) { acc, _, _ -> acc + 1 }
 

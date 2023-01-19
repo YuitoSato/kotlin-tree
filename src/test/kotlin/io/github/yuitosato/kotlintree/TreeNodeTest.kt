@@ -728,6 +728,38 @@ class TreeNodeTest : DescribeSpec({
         }
     }
 
+    describe("toFormattedString") {
+        it("returns the formatted string of a node") {
+            nodeOf(
+                1,
+                listOf(
+                    nodeOf(
+                        11,
+                        listOf(
+                            leafOf(111),
+                            nodeOf(
+                                112,
+                                listOf(
+                                    leafOf(1121),
+                                    leafOf(1122)
+                                )
+                            ),
+                            leafOf(113)
+                        )
+                    ),
+                    leafOf(12)
+                )
+            ).toFormattedString() shouldBe "1\n" +
+                "├── 11\n" +
+                "│   ├── 111\n" +
+                "│   ├── 112\n" +
+                "│   │   ├── 1121\n" +
+                "│   │   └── 1122\n" +
+                "│   └── 113\n" +
+                "└── 12"
+        }
+    }
+
     describe("flatten") {
         describe("prepend=true") {
             it("should prepend child nodes in each element to each node") {
