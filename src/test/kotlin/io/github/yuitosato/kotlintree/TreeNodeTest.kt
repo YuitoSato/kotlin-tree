@@ -710,6 +710,24 @@ class TreeNodeTest : DescribeSpec({
         }
     }
 
+    describe("size") {
+        it("returns Returns the size of nodes.") {
+            nodeOf(
+                1,
+                listOf(
+                    nodeOf(
+                        11,
+                        listOf(
+                            leafOf(111)
+                        )
+                    ),
+                    leafOf(12),
+                    leafOf(13)
+                )
+            ).size() shouldBe 5
+        }
+    }
+
     describe("flatten") {
         describe("prepend=true") {
             it("should prepend child nodes in each element to each node") {
