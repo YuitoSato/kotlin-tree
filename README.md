@@ -9,7 +9,7 @@ Easy to convert trees to other tree models, Path Enumeration Models and Adjacenc
 ### Gradle
 
 ```kts
-implementation("io.github.yuitosato:kotlin-tree:1.3.0")
+implementation("io.github.yuitosato:kotlin-tree:1.4.0")
 ```
 
 ### Maven
@@ -18,7 +18,7 @@ implementation("io.github.yuitosato:kotlin-tree:1.3.0")
 <dependency>
     <groupId>io.github.yuitosato</groupId>
     <artifactId>kotlin-tree</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
 </dependency>
 ```
 
@@ -91,6 +91,7 @@ val treeNode: TreeNode<Int> = nodeOf(
         leafOf(12)
     )
 )
+println(treeNode.toFormattedString)
 // 1
 // ├── 11
 // │   ├── 111
