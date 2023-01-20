@@ -747,7 +747,24 @@ class TreeNodeTest : DescribeSpec({
                             leafOf(113)
                         )
                     ),
-                    leafOf(12)
+                    nodeOf(
+                        12,
+                        listOf(
+                            leafOf(121),
+                            nodeOf(
+                                122,
+                                listOf(
+                                    leafOf(1221),
+                                    nodeOf(
+                                        1222,
+                                        listOf(
+                                            leafOf(12221)
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
                 )
             ).toFormattedString() shouldBe "1\n" +
                 "├── 11\n" +
@@ -756,7 +773,12 @@ class TreeNodeTest : DescribeSpec({
                 "│   │   ├── 1121\n" +
                 "│   │   └── 1122\n" +
                 "│   └── 113\n" +
-                "└── 12"
+                "└── 12\n" +
+                "    ├── 121\n" +
+                "    └── 122\n" +
+                "        ├── 1221\n" +
+                "        └── 1222\n" +
+                "            └── 12221"
         }
     }
 
