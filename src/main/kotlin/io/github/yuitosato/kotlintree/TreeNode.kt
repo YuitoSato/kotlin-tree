@@ -254,17 +254,27 @@ class MutableTreeNode<T> private constructor(
         foldNode(emptyList()) { acc, node -> acc.plus(node.asMutable()) }
 
     override fun toFormattedString(): String {
+        val levelToEnd = mutableMapOf<Int, Boolean>()
         return this.foldNodeInternal(emptyList<String>()) { acc, treeNode, indices ->
             val level = indices.size
 
             if (level == 0) {
+                levelToEnd[level] = true
                 acc.plus(treeNode.value.toString())
             } else {
                 val nextNode = this.getOrNull(indices.take(indices.size - 1).plus(indices.last() + 1))
-                val prefix = (0 until level - 1).joinToString("") { "│   " }
+                val skipDividerOffset = levelToEnd.keys.size - 1
+                val prefixDivider = (0 until level - 1 - skipDividerOffset).joinToString("") { "│   " }
+                val prefixSpace = (0 until skipDividerOffset).joinToString("") { "    " }
+                val prefix = prefixSpace + prefixDivider
+
                 if (nextNode != null) {
                     acc.plus(prefix + "├── " + treeNode.value.toString())
                 } else {
+                    val previousLevelEnd = levelToEnd[level - 1] ?: false
+                    if (previousLevelEnd) {
+                        levelToEnd[level] = true
+                    }
                     acc.plus(prefix + "└── " + treeNode.value.toString())
                 }
             }
