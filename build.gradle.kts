@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.8.10"
 
-    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
     id("signing")
     id("maven-publish")
 }
@@ -15,7 +15,7 @@ repositories {
     mavenCentral()
 }
 
-val kotestVersion = "5.5.4"
+val kotestVersion = "5.5.5"
 
 dependencies {
     testImplementation(kotlin("test"))
@@ -27,7 +27,7 @@ tasks.test {
     useJUnitPlatform()
 }
 
-val jvmVersion = 11
+val jvmVersion = 17
 
 kotlin {
     jvmToolchain {
