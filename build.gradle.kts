@@ -6,10 +6,11 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
     id("signing")
     id("maven-publish")
+    id("io.codearte.nexus-staging") version "0.30.0"
 }
 
 group = "io.github.yuitosato"
-version = "1.4.0"
+version = "1.4.1-TEST"
 
 repositories {
     mavenCentral()
@@ -46,6 +47,16 @@ tasks.withType<Test>().configureEach {
 java {
     withJavadocJar()
     withSourcesJar()
+}
+
+nexusStaging {
+    serverUrl = "https://s01.oss.sonatype.org/service/local/"
+    packageGroup = "io.github.yuitosato"
+
+    val sonatypeUsername: String? by project
+    val sonatypePassword: String? by project
+    username = sonatypeUsername
+    password = sonatypePassword
 }
 
 publishing {
@@ -109,5 +120,13 @@ signing {
 tasks.javadoc {
     if (JavaVersion.current().isJava9Compatible) {
         (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    }
+}
+
+tasks.register("publishProject") {
+    if (!version.toString().endsWith("SNAPSHOT")) {
+        dependsOn("publish", "closeAndReleaseRepository")
+    } else {
+        dependsOn("publish")
     }
 }
