@@ -36,4 +36,7 @@ jobs:
         run: ./gradlew build
 
       - name: publish
-        run: ./gradlew publishProject
+        run: ./gradlew publish
+
+      - name: closeAndReleaseRepositoryIfProductionRelease
+        run: ./gradlew closeAndReleaseRepositoryIfProductionRelease

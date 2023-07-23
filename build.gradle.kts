@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "io.github.yuitosato"
-version = "1.4.1"
+version = "1.4.2-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -123,10 +123,8 @@ tasks.javadoc {
     }
 }
 
-tasks.register("publishProject") {
+tasks.register("closeAndReleaseRepositoryIfProductionRelease") {
     if (!version.toString().endsWith("SNAPSHOT")) {
-        dependsOn("publish", "closeAndReleaseRepository")
-    } else {
-        dependsOn("publish")
+        dependsOn("closeAndReleaseRepository")
     }
 }
