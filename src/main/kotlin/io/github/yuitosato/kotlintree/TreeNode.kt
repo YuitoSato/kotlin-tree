@@ -129,7 +129,9 @@ sealed interface TreeNode<T> {
 fun <T> TreeNode<TreeNode<T>>.flatten(prepend: Boolean): TreeNode<T> {
     if (this is MutableTreeNode) {
         return (this.map { it.asMutable() }.asMutable()).flatten(prepend)
-    } else throw Exception("TODO")
+    } else {
+        throw Exception("TODO")
+    }
 }
 
 internal fun <T> TreeNode<T>.asMutable(): MutableTreeNode<T> =
@@ -141,7 +143,9 @@ internal fun <T> TreeNode<T>.asMutable(): MutableTreeNode<T> =
 fun <T> TreeNode<T>.toMutable(): MutableTreeNode<T> {
     return this.asMutable().foldNodeInternal(MutableTreeNode.of(this.value)) { acc, treeNode, indices ->
         val level = indices.size
-        if (level == 0) acc else {
+        if (level == 0) {
+            acc
+        } else {
             val newTreeNode = MutableTreeNode.of(treeNode.value)
             acc.getOrNull(indices.take(indices.size - 1))
                 ?.children?.add(newTreeNode)
@@ -168,7 +172,9 @@ class MutableTreeNode<T> private constructor(
         val initial = of(transform(this))
         return foldNodeInternal(initial) { acc, treeNode, indices ->
             val level = indices.size
-            if (level == 0) acc else {
+            if (level == 0) {
+                acc
+            } else {
                 val newTreeNode = of(transform(treeNode))
                 acc.getOrNull(indices.take(indices.size - 1))
                     ?.children?.add(newTreeNode)
@@ -210,7 +216,9 @@ class MutableTreeNode<T> private constructor(
         return foldNodeInternal(initial) { acc, treeNode, _ ->
             if (predicate(treeNode)) {
                 acc.plus(treeNode)
-            } else acc
+            } else {
+                acc
+            }
         }
     }
 
@@ -236,7 +244,9 @@ class MutableTreeNode<T> private constructor(
         val initial = of(ValueWithIndices(listOf(), value))
         return foldNodeInternal(initial) { acc, treeNode, indices ->
             val level = indices.size
-            if (level == 0) acc else {
+            if (level == 0) {
+                acc
+            } else {
                 val newTreeNode = of(ValueWithIndices(indices, treeNode.value))
                 acc.getOrNull(indices.take(indices.size - 1))
                     ?.children?.add(newTreeNode)

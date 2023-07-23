@@ -91,7 +91,9 @@ class AdjacencyList<ID, VALUE> private constructor(
                     val level = indices.size
                     val parentNode = if (level != 0) {
                         treeNode.getOrNull(indices.take(indices.size - 1))
-                    } else null
+                    } else {
+                        null
+                    }
                     acc + AdjacencyListItem(
                         parentNodeId = parentNode?.value?.let(getSelfNodeId),
                         selfNodeId = getSelfNodeId(node.value),
