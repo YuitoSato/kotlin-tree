@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "io.github.yuitosato"
-version = "1.4.1-TEST"
+version = "1.4.2-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -52,11 +52,8 @@ java {
 nexusStaging {
     serverUrl = "https://s01.oss.sonatype.org/service/local/"
     packageGroup = "io.github.yuitosato"
-
-    val sonatypeUsername: String? by project
-    val sonatypePassword: String? by project
-    username = sonatypeUsername
-    password = sonatypePassword
+    username = System.getenv("SONATYPE_USERNAME")
+    password = System.getenv("SONATYPE_PASSWORD")
 }
 
 publishing {
@@ -100,10 +97,8 @@ publishing {
     repositories {
         maven {
             credentials {
-                val sonatypeUsername: String? by project
-                val sonatypePassword: String? by project
-                username = sonatypeUsername
-                password = sonatypePassword
+                username = System.getenv("SONATYPE_USERNAME")
+                password = System.getenv("SONATYPE_PASSWORD")
             }
 
             val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
@@ -114,6 +109,10 @@ publishing {
 }
 
 signing {
+    val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
+    val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+
+    useInMemoryPgpKeys(signingKeyId, null, signingPassword)
     sign(publishing.publications["mavenJava"])
 }
 
