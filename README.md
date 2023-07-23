@@ -9,7 +9,9 @@ Easy to convert trees to other tree models, Path Enumeration Models and Adjacenc
 ### Gradle
 
 ```kts
-implementation("io.github.yuitosato:kotlin-tree:1.4.0")
+dependencies {
+    implementation("io.github.yuitosato:kotlin-tree:1.4.1")
+}
 ```
 
 ### Maven
@@ -18,7 +20,7 @@ implementation("io.github.yuitosato:kotlin-tree:1.4.0")
 <dependency>
     <groupId>io.github.yuitosato</groupId>
     <artifactId>kotlin-tree</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
 </dependency>
 ```
 
