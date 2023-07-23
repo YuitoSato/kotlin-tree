@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "1.9.0"
 
-    id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.5.0"
     id("signing")
     id("maven-publish")
     id("io.codearte.nexus-staging") version "0.30.0"
@@ -16,7 +16,7 @@ repositories {
     mavenCentral()
 }
 
-val kotestVersion = "5.5.5"
+val kotestVersion = "5.6.2"
 
 dependencies {
     testImplementation(kotlin("test"))
