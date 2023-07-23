@@ -111,7 +111,7 @@ publishing {
 signing {
     val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
     val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
-    val signingKeyFile = file("${System.getenv("GITHUB_WORKSPACE")}/secring.gpg")
+    val signingKeyFile = file("./secring.gpg")
     val signingKey = signingKeyFile.readText()
 
     useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
