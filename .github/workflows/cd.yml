@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - cicd-flow-2
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'gradle'
+
+      - name: ktlint
+        run: ./gradlew ktlintCheck
+
+      - name: test
+        run: ./gradlew test
+
+      - name: Decode secring.gpg
+        run: echo "${{ secrets.SIGNING_SECRET_KEY_RING_FILE_BASE64 }}" | base64 --decode > ./secring.gpg
+
+      - name: Setup gradle properties
+        run: |
+          echo "signing.keyId=${{ secrets.SIGNING_KEY_ID }}" >> gradle.properties
+          echo "signing.password=${{ secrets.SIGNING_PASSWORD }}" >> gradle.properties
+          echo "signing.secretKeyRingFile=./secring.gpg" >> gradle.properties
+          echo "sonatypeUsername=${{ secrets.SONATYPE_USERNAME }}" >> gradle.properties
+          echo "sonatypePassword=${{ secrets.SONATYPE_PASSWORD }}" >> gradle.properties
+        shell: bash
+
+      - name: build
+        run: ./gradlew build
+
+      - name: publish
+        run: ./gradlew publishProject
