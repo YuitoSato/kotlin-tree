@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "io.github.yuitosato"
-version = "1.4.2-SNAPSHOT"
+version = "1.4.2"
 
 repositories {
     mavenCentral()
