@@ -293,8 +293,29 @@ class MutableTreeNode<T> private constructor(
 
     override fun size(): Int = foldNodeInternal(0) { acc, _, _ -> acc + 1 }
 
+    /**
+     * Add a child node.
+     */
     fun addChildNode(node: MutableTreeNode<T>) {
         children.add(node)
+    }
+
+    /**
+     * Add a child node in a DSL block.
+     */
+    fun nodeOf(
+        value: T,
+        addChildren: MutableTreeNode<T>.() -> Unit
+    ) {
+        val node = TreeNode.of(value).asMutable().apply(addChildren)
+        this.addChildNode(node)
+    }
+
+    /**
+     * Add a child leaf node in a DSL block.
+     */
+    fun leafOf(value: T) {
+        this.addChildNode(TreeNode.of(value))
     }
 
     /**
@@ -391,3 +412,17 @@ fun <T> nodeOf(value: T, children: List<TreeNode<T>>): TreeNode<T> = TreeNode.of
  * Returns a leaf that does not have any children
  */
 fun <T> leafOf(value: T): TreeNode<T> = TreeNode.of(value)
+
+/**
+ * Returns a tree node in DSL style.
+ *
+ * nodeOf(1) {
+ *     nodeOf(11) {
+ *         leafOf(111)
+ *         leafOf(112)
+ *     }
+ *     leafOf(12)
+ * }
+ */
+fun <T> nodeOf(value: T, addChildren: MutableTreeNode<T>.() -> Unit): TreeNode<T> =
+    leafOf(value).asMutable().apply(addChildren)
