@@ -992,4 +992,46 @@ class TreeNodeTest : DescribeSpec({
             )
         }
     }
+
+    describe("nodeOf in DSL style") {
+        it("returns a tree node in DSL style") {
+            val node = nodeOf(1) {
+                addNode(11) {
+                    addNode(111) {
+                        addLeaf(1111)
+                        addLeaf(1112)
+                    }
+                    addLeaf(112)
+                }
+                addNode(12) {
+                    addLeaf(121)
+                }
+            }
+
+            node shouldBe nodeOf(
+                1,
+                listOf(
+                    nodeOf(
+                        11,
+                        listOf(
+                            nodeOf(
+                                111,
+                                listOf(
+                                    leafOf(1111),
+                                    leafOf(1112)
+                                )
+                            ),
+                            leafOf(112)
+                        )
+                    ),
+                    nodeOf(
+                        12,
+                        listOf(
+                            leafOf(121)
+                        )
+                    )
+                )
+            )
+        }
+    }
 })
