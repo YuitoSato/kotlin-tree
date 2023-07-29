@@ -293,6 +293,10 @@ class MutableTreeNode<T> private constructor(
 
     override fun size(): Int = foldNodeInternal(0) { acc, _, _ -> acc + 1 }
 
+    fun addChildNode(node: MutableTreeNode<T>) {
+        children.add(node)
+    }
+
     /**
      * Accumulates value starting with [initial] value and applying [operation] to current accumulator value and each tree node by depth-first-search.
      *
