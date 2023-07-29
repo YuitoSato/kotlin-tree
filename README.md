@@ -10,7 +10,7 @@ Easy to convert trees to other tree models, Path Enumeration Models and Adjacenc
 
 ```kts
 dependencies {
-    implementation("io.github.yuitosato:kotlin-tree:1.4.2")
+    implementation("io.github.yuitosato:kotlin-tree:1.5.0")
 }
 ```
 
@@ -20,7 +20,7 @@ dependencies {
 <dependency>
     <groupId>io.github.yuitosato</groupId>
     <artifactId>kotlin-tree</artifactId>
-    <version>1.4.2</version>
+    <version>1.5.0</version>
 </dependency>
 ```
 
@@ -71,6 +71,22 @@ treeNode.map { ele -> ele * 2 }
 ```
 
 ## Examples
+
+### DSL Style 
+```kt
+val treeNode: TreeNode<Int> = nodeOf(1) {
+    addNode(11) {
+        addLeaf(111)
+        addLeaf(112)
+    }
+    addLeaf(12)
+}
+// 1
+// ├── 11
+// │   ├── 111
+// │   └── 112
+// └── 12
+```
 
 ### Tree Operations
 
