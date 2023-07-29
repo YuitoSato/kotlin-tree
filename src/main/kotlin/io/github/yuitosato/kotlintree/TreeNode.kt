@@ -303,7 +303,7 @@ class MutableTreeNode<T> private constructor(
     /**
      * Add a child node in a DSL block.
      */
-    fun nodeOf(
+    fun addNode(
         value: T,
         addChildren: MutableTreeNode<T>.() -> Unit
     ) {
@@ -314,7 +314,7 @@ class MutableTreeNode<T> private constructor(
     /**
      * Add a child leaf node in a DSL block.
      */
-    fun leafOf(value: T) {
+    fun addLeaf(value: T) {
         this.addChildNode(TreeNode.of(value))
     }
 
