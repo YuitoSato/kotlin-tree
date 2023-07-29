@@ -1,5 +1,7 @@
-package io.github.yuitosato.kotlintree
+package io.github.yuitosato.kotlintree.dsl
 
+import io.github.yuitosato.kotlintree.TreeNode
+import io.github.yuitosato.kotlintree.leafOf
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
@@ -18,13 +20,13 @@ class TreeNodeDSLTest : DescribeSpec({
                     leafOf(121)
                 }
             }
-            node shouldBe nodeOf(
+            node shouldBe TreeNode.of(
                 1,
                 listOf(
-                    nodeOf(
+                    TreeNode.of(
                         11,
                         listOf(
-                            nodeOf(
+                            TreeNode.of(
                                 111,
                                 listOf(
                                     leafOf(1111),
@@ -34,7 +36,7 @@ class TreeNodeDSLTest : DescribeSpec({
                             leafOf(112)
                         )
                     ),
-                    nodeOf(
+                    TreeNode.of(
                         12,
                         listOf(
                             leafOf(121)
