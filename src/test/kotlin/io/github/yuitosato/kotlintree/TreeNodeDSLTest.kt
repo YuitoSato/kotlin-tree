@@ -25,7 +25,8 @@ class TreeNodeDSLTest : DescribeSpec({
                         11,
                         listOf(
                             nodeOf(
-                                111, listOf(
+                                111,
+                                listOf(
                                     leafOf(1111),
                                     leafOf(1112)
                                 )

@@ -18,7 +18,8 @@ fun <T> nodeOf(value: T, addChildren: MutableTreeNode<T>.() -> Unit): TreeNode<T
  * Add a child node in a DSL block.
  */
 fun <T> MutableTreeNode<T>.nodeOf(
-    value: T, addChildren: MutableTreeNode<T>.() -> Unit
+    value: T,
+    addChildren: MutableTreeNode<T>.() -> Unit
 ) {
     val node = TreeNode.of(value).asMutable().apply(addChildren)
     this.addChildNode(node)
