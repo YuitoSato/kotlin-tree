@@ -1,6 +1,5 @@
 package io.github.yuitosato.kotlintree
 
-
 internal class Stack<E> {
     private val list = mutableListOf<E>()
 
