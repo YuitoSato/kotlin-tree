@@ -1,7 +1,5 @@
 package io.github.yuitosato.kotlintree
 
-import java.util.Stack
-
 /**
  * Class for Adjacency Model.
  * A pair parent node id and self node id in an adjacency list must be unique.

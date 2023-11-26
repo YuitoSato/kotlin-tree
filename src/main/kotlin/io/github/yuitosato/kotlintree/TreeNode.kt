@@ -1,7 +1,5 @@
 package io.github.yuitosato.kotlintree
 
-import java.util.Stack
-
 /**
  * Class for Multi-way Trees
  */
