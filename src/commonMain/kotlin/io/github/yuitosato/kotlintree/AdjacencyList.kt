@@ -40,7 +40,7 @@ class AdjacencyList<ID, VALUE> private constructor(
                 } else {
                     tree?.getOrNull(indices.take(indices.size - 1))?.children?.add(newTreeNode)
                 }
-                val children = parentNodeIdToChildren[listItem.selfNodeId] ?:  mutableListOf()
+                val children = parentNodeIdToChildren[listItem.selfNodeId] ?: mutableListOf()
                 parentNodeIdToChildren.remove(listItem.selfNodeId)
                 children.withIndex().reversed().forEach { (index, child) ->
                     itemAndIndicesStack += child to indices.plus(index)
