@@ -19,7 +19,6 @@ class AdjacencyListTest : FunSpec({
         exception.message shouldBe "A pair selfNodeId and parentNodeId must be unique in a adjacency list."
     }
 
-
     test("toTreeNode method converts an adjacency list to tree node list") {
         val actual = AdjacencyList.of(
             getSelfNodeId = { it },
@@ -95,5 +94,4 @@ class AdjacencyListTest : FunSpec({
             )
         )
     }
-
 })

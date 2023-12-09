@@ -37,7 +37,6 @@ class TreeNodeTest : FunSpec({
         )
     }
 
-
     test("foldNode method folds a tree node and returns the sums of each node") {
         val tree = nodeOf(
             1,
@@ -81,7 +80,6 @@ class TreeNodeTest : FunSpec({
 
         actual shouldBe listOf(1, 11, 111, 12)
     }
-
 
     test("mapNode method applies function to each node in tree node") {
         val tree = nodeOf(
@@ -179,7 +177,6 @@ class TreeNodeTest : FunSpec({
 
         actual shouldBe expected
     }
-
 
     test("forEach method applies function to each values in tree node") {
         val tree = nodeOf(
@@ -689,7 +686,6 @@ class TreeNodeTest : FunSpec({
         ).size() shouldBe 5
     }
 
-
     test("toFormattedString method returns the formatted string of a node") {
         nodeOf(
             1,
@@ -728,18 +724,18 @@ class TreeNodeTest : FunSpec({
                 )
             )
         ).toFormattedString() shouldBe "1\n" +
-                "├── 11\n" +
-                "│   ├── 111\n" +
-                "│   ├── 112\n" +
-                "│   │   ├── 1121\n" +
-                "│   │   └── 1122\n" +
-                "│   └── 113\n" +
-                "└── 12\n" +
-                "    ├── 121\n" +
-                "    └── 122\n" +
-                "        ├── 1221\n" +
-                "        └── 1222\n" +
-                "            └── 12221"
+            "├── 11\n" +
+            "│   ├── 111\n" +
+            "│   ├── 112\n" +
+            "│   │   ├── 1121\n" +
+            "│   │   └── 1122\n" +
+            "│   └── 113\n" +
+            "└── 12\n" +
+            "    ├── 121\n" +
+            "    └── 122\n" +
+            "        ├── 1221\n" +
+            "        └── 1222\n" +
+            "            └── 12221"
     }
 
     test("when prepend=true, flatten method prepends child nodes in each element to each node") {
@@ -903,7 +899,6 @@ class TreeNodeTest : FunSpec({
     test("leafOf method returns a tree node with empty children") {
         leafOf(1) shouldBe TreeNode.of(1, listOf())
     }
-
 
     test("of method returns a tree node with empty children") {
         TreeNode.of(1) shouldBe TreeNode.of(1, listOf())
