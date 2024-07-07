@@ -1,14 +1,21 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+buildscript {
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
+    }
+}
 
 plugins {
-    kotlin("multiplatform") version "1.9.22"
+    kotlin("multiplatform") version "2.0.0"
 
     id("org.jlleitschuh.gradle.ktlint") version "11.5.0"
     id("signing")
     id("maven-publish")
     id("io.codearte.nexus-staging") version "0.30.0"
-    id("io.kotest.multiplatform") version "5.8.0"
+    id("io.kotest.multiplatform") version "5.9.0"
     id("org.jetbrains.dokka") version "1.9.10"
     id("com.android.library") version "8.2.0"
     `maven-publish`
@@ -31,21 +38,29 @@ kotlin {
     jvm {
         withSourcesJar()
     }
-    jvmToolchain(jvmVersion)
+//    jvmToolchain(jvmVersion)
 
     js(IR) {
         browser()
         nodejs()
     }
-
     androidTarget {
         publishLibraryVariants("release")
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
         }
     }
+//
+//    androidTarget {
+//
+//        publishLibraryVariants("release")
+//        compilations.all {
+//            kotlinOptions {
+//                jvmTarget = "1.8"
+//            }
+//        }
+//    }
 
     /* https://kotlinlang.org/docs/native-target-support.html#tier-1 */
 
@@ -72,8 +87,9 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
-            tasks.withType<KotlinCompile> {
-                kotlinOptions.jvmTarget = jvmVersion.toString()
+            dependencies {
+                implementation(kotlin("stdlib-common"))
+                implementation(kotlin("reflect"))
             }
 
             tasks.withType<Javadoc>().configureEach {
@@ -113,9 +129,9 @@ kotlin {
     }
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = jvmVersion.toString()
-}
+// tasks.withType<KotlinCompile> {
+//    kotlinOptions.jvmTarget = jvmVersion.toString()
+// }
 
 nexusStaging {
     serverUrl = "https://s01.oss.sonatype.org/service/local/"
