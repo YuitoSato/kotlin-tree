@@ -16,7 +16,7 @@ plugins {
 }
 
 group = "io.github.yuitosato"
-version = "1.5.0_SNAPSHOT"
+version = "1.5.1_rc5"
 
 repositories {
     mavenCentral()
@@ -108,6 +108,14 @@ kotlin {
             }
         }
     }
+
+    targets.all {
+        compilations.all {
+            kotlinOptions {
+                freeCompilerArgs += "-Xskip-prerelease-check"
+            }
+        }
+    }
 }
 
 android {
@@ -115,6 +123,7 @@ android {
     compileSdk = 34
     defaultConfig {
         minSdk = 28
+        targetSdk = 34
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -132,67 +141,77 @@ nexusStaging {
     password = ossrhTokenPassword
 }
 
-publishing {
-    plugins.withType<MavenPublishPlugin> {
-        apply(plugin = "org.gradle.signing")
+afterEvaluate {
+    publishing {
+        plugins.withType<MavenPublishPlugin> {
+            apply(plugin = "org.gradle.signing")
 
-        plugins.withType<KotlinMultiplatformPluginWrapper> {
-            apply(plugin = "org.jetbrains.dokka")
-        }
-    }
-
-    publications {
-        create<MavenPublication>("mavenJava") {
-            artifactId = "kotlin-tree"
-            versionMapping {
-                usage("java-api") {
-                    fromResolutionOf("runtimeClasspath")
-                }
-                usage("java-runtime") {
-                    fromResolutionResult()
-                }
+            plugins.withType<KotlinMultiplatformPluginWrapper> {
+                apply(plugin = "org.jetbrains.dokka")
             }
-            pom {
-                name.set("kotlin-tree")
-                description.set("Kotlin Declarative APIs for Multi-way Tree Data.")
-                url.set("https://github.com/YuitoSato/kotlin-tree")
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("YuitoSato")
-                        name.set("Yuito Sato")
-                        email.set("yuitosato.w@gmail.com")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git@github.com:YuitoSato/kotlin-tree.git")
-                    developerConnection.set("git@github.com:YuitoSato/kotlin-tree.git")
+        }
+
+        publications {
+            withType<MavenPublication> {
+                groupId = project.group.toString()
+                artifactId = "kotlin-tree"
+                version = project.version.toString()
+
+                pom {
+                    name.set("kotlin-tree")
+                    description.set("Kotlin Declarative APIs for Multi-way Tree Data.")
                     url.set("https://github.com/YuitoSato/kotlin-tree")
+                    licenses {
+                        license {
+                            name.set("Apache License, Version 2.0")
+                            url.set("https://github.com/YuitoSato/kotlin-tree/blob/master/LICENSE")
+                        }
+                    }
+                    developers {
+                        developer {
+                            id.set("YuitoSato")
+                            name.set("Yuito Sato")
+                            email.set("yuitosato.w@gmail.com")
+                        }
+                    }
+                    scm {
+                        connection.set("scm:git:git@github.com:YuitoSato/kotlin-tree.git")
+                        developerConnection.set("git@github.com:YuitoSato/kotlin-tree.git")
+                        url.set("https://github.com/YuitoSato/kotlin-tree")
+                    }
                 }
             }
         }
-    }
-    repositories {
-        maven {
-            credentials {
-                val ossrhToken: String? by project
-                val ossrhTokenPassword: String? by project
-                username = ossrhToken
-                password = ossrhTokenPassword
-            }
 
-            val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+        repositories {
+            maven {
+                credentials {
+                    val ossrhToken: String? by project
+                    val ossrhTokenPassword: String? by project
+                    username = ossrhToken
+                    password = ossrhTokenPassword
+                }
+
+                val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+            }
         }
     }
 }
 
 signing {
-    sign(publishing.publications["mavenJava"])
+    sign(publishing.publications)
+    setRequired({ gradle.taskGraph.hasTask("publish") })
+}
+
+tasks.withType<Sign>().configureEach {
+    onlyIf { !project.hasProperty("skipSigning") }
+}
+
+tasks.register("publishToSonatype") {
+    group = "publishing"
+    description = "Publishes all Maven publications to Sonatype"
+    dependsOn(tasks.withType<AbstractPublishToMaven>())
+    dependsOn(tasks.withType<Sign>())
 }
