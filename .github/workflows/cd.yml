@@ -26,17 +26,17 @@ jobs:
       - name: Setup gradle properties
         run: |
           echo "signing.keyId=${{ secrets.SIGNING_KEY_ID }}" >> gradle.properties
-          echo "signing.password=${{ secrets.SIGNING_PASSWORD }}" >> gradle.properties
+          echo "signing.password=${{ secrets.OSSRH_TOKEN_PASSWORD }}" >> gradle.properties
           echo "signing.secretKeyRingFile=./secring.gpg" >> gradle.properties
-          echo "sonatypeUsername=${{ secrets.SONATYPE_USERNAME }}" >> gradle.properties
-          echo "sonatypePassword=${{ secrets.SONATYPE_PASSWORD }}" >> gradle.properties
+          echo "ossrhToken=${{ secrets.OSSRH_TOKEN }}" >> gradle.properties
+          echo "ossrhTokenPassword=${{ secrets.OSSRH_TOKEN_PASSWORD }}" >> gradle.properties
         shell: bash
 
       - name: build
         run: ./gradlew build
 
       - name: publish
-        run: ./gradlew publish
+        run: ./gradlew publishToSonatype
 
       - name: closeAndReleaseRepositoryIfProductionRelease
         run: ./gradlew closeAndReleaseRepositoryIfProductionRelease
