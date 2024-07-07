@@ -24,7 +24,7 @@ repositories {
 
 val kotestVersion = "5.9.0"
 
-val jvmVersion = 11
+val jvmVersion = 17
 
 kotlin {
     applyDefaultHierarchyTemplate()
