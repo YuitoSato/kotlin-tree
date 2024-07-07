@@ -193,7 +193,7 @@ signing {
 }
 
 android {
-    namespace="io.github.yuitosato.kotlintree"
+    namespace = "io.github.yuitosato.kotlintree"
     compileSdk = 34
     defaultConfig {
         minSdk = 28
