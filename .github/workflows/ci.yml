@@ -17,4 +17,4 @@ jobs:
       - name: ktlint
         run: ./gradlew ktlintCheck
       - name: test
-        run: ./gradlew test
+        run: ./gradlew allTests

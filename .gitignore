@@ -4,6 +4,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 *.hprof
+local.properties
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -42,3 +43,35 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/.kotlin/errors/errors-1720266218758.log
+/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/org.jetbrains.kotlinx-atomicfu-0.23.1-nativeMain-cinterop/org.jetbrains.kotlinx_atomicfu-cinterop-interop-wFq7cg.klib
+/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/.-appleMain.cinteropLibraries
+/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/.-appleTest.cinteropLibraries
+/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/.-iosMain.cinteropLibraries
+/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/.-iosTest.cinteropLibraries
+/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/.-macosMain.cinteropLibraries
+/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/.-macosTest.cinteropLibraries
+/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/.-nativeMain.cinteropLibraries
+/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/.-nativeTest.cinteropLibraries
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-assertions-api-5.9.0-commonMain-ZStZ6Q.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-assertions-core-5.9.0-commonMain-igCO-Q.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-assertions-core-5.9.0-desktopMain-igCO-Q.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-assertions-shared-5.9.0-commonMain-l5sVDg.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-assertions-shared-5.9.0-desktopMain-l5sVDg.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-common-5.9.0-commonMain-Dq9vyw.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-common-5.9.0-desktopMain-Dq9vyw.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-framework-api-5.9.0-commonMain-wRJ4Rg.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-framework-api-5.9.0-desktopMain-wRJ4Rg.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-framework-engine-5.9.0-commonMain-MWpaog.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/io.kotest-kotest-framework-engine-5.9.0-desktopMain-MWpaog.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlin-kotlin-stdlib-2.0.0-commonMain-2bbUHA.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlin-kotlin-test-2.0.0-annotationsCommonMain-24eTFQ.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlin-kotlin-test-2.0.0-assertionsCommonMain-24eTFQ.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlinx-atomicfu-0.23.1-commonMain-wFq7cg.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlinx-atomicfu-0.23.1-nativeMain-wFq7cg.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlinx-kotlinx-coroutines-core-1.8.0-commonMain-UxhG-g.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlinx-kotlinx-coroutines-core-1.8.0-concurrentMain-UxhG-g.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlinx-kotlinx-coroutines-core-1.8.0-nativeDarwinMain-sy5nKg.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlinx-kotlinx-coroutines-core-1.8.0-nativeMain-UxhG-g.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlinx-kotlinx-coroutines-test-1.8.0-commonMain-5kOtQw.klib
+/.kotlin/metadata/kotlinTransformedMetadataLibraries/org.jetbrains.kotlinx-kotlinx-coroutines-test-1.8.0-nativeMain-5kOtQw.klib
