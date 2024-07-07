@@ -137,10 +137,10 @@ nexusStaging {
     serverUrl = "https://s01.oss.sonatype.org/service/local/"
     packageGroup = "io.github.yuitosato"
 
-    val sonatypeUsername: String? by project
-    val sonatypePassword: String? by project
-    username = sonatypeUsername
-    password = sonatypePassword
+    val ossrhToken: String? by project
+    val ossrhTokenPassword: String? by project
+    username = ossrhToken
+    password = ossrhTokenPassword
 }
 
 publishing {
@@ -191,10 +191,10 @@ publishing {
     repositories {
         maven {
             credentials {
-                val sonatypeUsername: String? by project
-                val sonatypePassword: String? by project
-                username = sonatypeUsername
-                password = sonatypePassword
+                val ossrhToken: String? by project
+                val ossrhTokenPassword: String? by project
+                username = ossrhToken
+                password = ossrhTokenPassword
             }
 
             val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
