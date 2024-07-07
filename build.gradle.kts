@@ -141,34 +141,28 @@ publishing {
         }
     }
 
-    publications {
-        withType<MavenPublication> {
-            groupId = project.group.toString()
-            artifactId = "kotlin-tree"
-            version = project.version.toString()
-
-            pom {
-                name.set("kotlin-tree")
-                description.set("Kotlin Declarative APIs for Multi-way Tree Data.")
+    publications.all {
+        (this as MavenPublication).pom {
+            name.set("kotlin-tree")
+            description.set("Kotlin Declarative APIs for Multi-way Tree Data.")
+            url.set("https://github.com/YuitoSato/kotlin-tree")
+            licenses {
+                license {
+                    name.set("Apache License, Version 2.0")
+                    url.set("https://github.com/YuitoSato/kotlin-tree/blob/master/LICENSE")
+                }
+            }
+            developers {
+                developer {
+                    id.set("YuitoSato")
+                    name.set("Yuito Sato")
+                    email.set("yuitosato.w@gmail.com")
+                }
+            }
+            scm {
+                connection.set("scm:git:git@github.com:YuitoSato/kotlin-tree.git")
+                developerConnection.set("git@github.com:YuitoSato/kotlin-tree.git")
                 url.set("https://github.com/YuitoSato/kotlin-tree")
-                licenses {
-                    license {
-                        name.set("Apache License, Version 2.0")
-                        url.set("https://github.com/YuitoSato/kotlin-tree/blob/master/LICENSE")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("YuitoSato")
-                        name.set("Yuito Sato")
-                        email.set("yuitosato.w@gmail.com")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git@github.com:YuitoSato/kotlin-tree.git")
-                    developerConnection.set("git@github.com:YuitoSato/kotlin-tree.git")
-                    url.set("https://github.com/YuitoSato/kotlin-tree")
-                }
             }
         }
     }
