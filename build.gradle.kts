@@ -16,7 +16,7 @@ plugins {
 }
 
 group = "io.github.yuitosato"
-version = "1.5.1_rc5"
+version = "2.0.0_SNAPSHOT"
 
 repositories {
     mavenCentral()
