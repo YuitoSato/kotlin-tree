@@ -38,7 +38,7 @@ kotlin {
     jvm {
         withSourcesJar()
     }
-//    jvmToolchain(jvmVersion)
+    jvmToolchain(jvmVersion)
 
     js(IR) {
         browser()
