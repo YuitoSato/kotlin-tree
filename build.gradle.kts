@@ -2,12 +2,6 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper
 
-buildscript {
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
-    }
-}
-
 plugins {
     kotlin("multiplatform") version "2.0.0"
 
@@ -35,6 +29,7 @@ val jvmVersion = 17
 
 kotlin {
     applyDefaultHierarchyTemplate()
+
     jvm {
         withSourcesJar()
     }
@@ -44,6 +39,7 @@ kotlin {
         browser()
         nodejs()
     }
+
     androidTarget {
         publishLibraryVariants("release")
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -51,16 +47,6 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_1_8)
         }
     }
-//
-//    androidTarget {
-//
-//        publishLibraryVariants("release")
-//        compilations.all {
-//            kotlinOptions {
-//                jvmTarget = "1.8"
-//            }
-//        }
-//    }
 
     /* https://kotlinlang.org/docs/native-target-support.html#tier-1 */
 
@@ -87,11 +73,6 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib-common"))
-                implementation(kotlin("reflect"))
-            }
-
             tasks.withType<Javadoc>().configureEach {
                 if (JavaVersion.current().isJava9Compatible) {
                     (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
@@ -129,9 +110,17 @@ kotlin {
     }
 }
 
-// tasks.withType<KotlinCompile> {
-//    kotlinOptions.jvmTarget = jvmVersion.toString()
-// }
+android {
+    namespace = "io.github.yuitosato.kotlintree"
+    compileSdk = 34
+    defaultConfig {
+        minSdk = 28
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
 
 nexusStaging {
     serverUrl = "https://s01.oss.sonatype.org/service/local/"
@@ -206,16 +195,4 @@ publishing {
 
 signing {
     sign(publishing.publications["mavenJava"])
-}
-
-android {
-    namespace = "io.github.yuitosato.kotlintree"
-    compileSdk = 34
-    defaultConfig {
-        minSdk = 28
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
 }
