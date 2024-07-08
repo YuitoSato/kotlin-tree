@@ -1,7 +1,5 @@
 package io.github.yuitosato.kotlintree
 
-import java.util.Stack
-
 /**
  * Class for Adjacency Model.
  * A pair parent node id and self node id in an adjacency list must be unique.
@@ -42,7 +40,7 @@ class AdjacencyList<ID, VALUE> private constructor(
                 } else {
                     tree?.getOrNull(indices.take(indices.size - 1))?.children?.add(newTreeNode)
                 }
-                val children = parentNodeIdToChildren.getOrDefault(listItem.selfNodeId, mutableListOf())
+                val children = parentNodeIdToChildren[listItem.selfNodeId] ?: mutableListOf()
                 parentNodeIdToChildren.remove(listItem.selfNodeId)
                 children.withIndex().reversed().forEach { (index, child) ->
                     itemAndIndicesStack += child to indices.plus(index)
