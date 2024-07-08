@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper
 
 plugins {
     kotlin("multiplatform") version "2.0.0"
@@ -10,7 +9,6 @@ plugins {
     id("maven-publish")
     id("io.codearte.nexus-staging") version "0.30.0"
     id("io.kotest.multiplatform") version "5.9.0"
-    id("org.jetbrains.dokka") version "1.9.10"
     id("com.android.library") version "8.2.0"
     `maven-publish`
 }
@@ -133,14 +131,6 @@ nexusStaging {
 }
 
 publishing {
-    plugins.withType<MavenPublishPlugin> {
-        apply(plugin = "org.gradle.signing")
-
-        plugins.withType<KotlinMultiplatformPluginWrapper> {
-            apply(plugin = "org.jetbrains.dokka")
-        }
-    }
-
     publications.all {
         (this as MavenPublication).pom {
             name.set("kotlin-tree")
