@@ -1,21 +1,13 @@
 package io.github.yuitosato.kotlintree
 
 internal class Stack<E> {
-    private val list = mutableListOf<E>()
+    private val deque = ArrayDeque<E>()
 
-    operator fun plusAssign(item: E) {
-        list.add(item)
-    }
-    fun pop(): E {
-        if (isEmpty()) {
-            throw NoSuchElementException("Stack is empty.")
-        }
-        return list.removeAt(list.size - 1)
-    }
+    inline operator fun plusAssign(item: E) = deque.addLast(item)
 
-    private fun isEmpty() = list.isEmpty()
+    inline fun pop(): E = deque.removeLast()
 
-    fun isNotEmpty() = list.isNotEmpty()
+    inline fun isNotEmpty() = deque.isNotEmpty()
 
-    fun size() = list.size
+    inline fun size() = deque.size
 }
