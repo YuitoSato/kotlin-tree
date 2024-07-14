@@ -10,10 +10,7 @@ Easy to convert trees to other tree models, Path Enumeration Models and Adjacenc
 
 ```kts
 dependencies {
-    implementation("io.github.yuitosato:kotlin-tree-jvm:2.0.0") // for JVM
-    implementation("io.github.yuitosato:kotlin-tree-js:2.0.0") // for JS
-    implementation("io.github.yuitosato:kotlin-tree-android:2.0.0") // for Android
-    implementation("io.github.yuitosato:kotlin-tree-iosX64:2.0.0") // for iOS (X64)
+    implementation("io.github.yuitosato:kotlin-tree:2.0.0")
 }
 ```
 
@@ -22,7 +19,7 @@ dependencies {
 ```pom
 <dependency>
     <groupId>io.github.yuitosato</groupId>
-    <artifactId>kotlin-tree-jvm</artifactId>
+    <artifactId>kotlin-tree</artifactId>
     <version>2.0.0</version>
 </dependency>
 ```
