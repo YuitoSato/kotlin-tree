@@ -10,6 +10,7 @@ plugins {
     id("io.codearte.nexus-staging") version "0.30.0"
     id("io.kotest.multiplatform") version "5.9.0"
     id("com.android.library") version "8.2.0"
+    id("org.jetbrains.dokka") version "1.9.10"
     `maven-publish`
 }
 
@@ -70,25 +71,6 @@ kotlin {
     iosArm64()
 
     sourceSets {
-        val commonMain by getting {
-            tasks.withType<Javadoc>().configureEach {
-                if (JavaVersion.current().isJava9Compatible) {
-                    (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
-                }
-            }
-
-            tasks.register("closeAndReleaseRepositoryIfProductionRelease") {
-                if (!version.toString().endsWith("SNAPSHOT")) {
-                    dependsOn("closeAndReleaseRepository")
-                }
-            }
-
-            tasks.register<Jar>("javadocJar") {
-                archiveClassifier.set("javadoc")
-                from(tasks.withType<Javadoc>())
-            }
-        }
-
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
@@ -131,8 +113,19 @@ nexusStaging {
 }
 
 publishing {
-    publications.all {
-        (this as MavenPublication).pom {
+    publications.withType<MavenPublication> {
+        val targetName = this@withType.name
+
+        artifact(
+            tasks.register("${targetName}JavadocJar", Jar::class) {
+                group = LifecycleBasePlugin.BUILD_GROUP
+                description = "Assembles a jar archive containing the Javadoc API documentation of target '$targetName'."
+                archiveClassifier.set("javadoc")
+                archiveAppendix.set(targetName)
+            }
+        )
+
+        pom {
             name.set("kotlin-tree")
             description.set("Kotlin Declarative APIs for Multi-way Tree Data.")
             url.set("https://github.com/YuitoSato/kotlin-tree")
@@ -175,6 +168,21 @@ publishing {
 
 signing {
     sign(publishing.publications)
+}
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(buildDir.resolve("dokka"))
+}
+
+tasks.register<Jar>("javadocJar") {
+    archiveClassifier.set("javadoc")
+    from(tasks.dokkaHtml)
+}
+
+tasks.register("closeAndReleaseRepositoryIfProductionRelease") {
+    if (!version.toString().endsWith("SNAPSHOT")) {
+        dependsOn("closeAndReleaseRepository")
+    }
 }
 
 tasks.register("publishToSonatype") {
