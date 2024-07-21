@@ -10,7 +10,6 @@ plugins {
     id("io.codearte.nexus-staging") version "0.30.0"
     id("io.kotest.multiplatform") version "5.9.0"
     id("com.android.library") version "8.2.0"
-    id("org.jetbrains.dokka") version "1.9.10"
     `maven-publish`
 }
 
@@ -168,15 +167,6 @@ publishing {
 
 signing {
     sign(publishing.publications)
-}
-
-tasks.dokkaHtml.configure {
-    outputDirectory.set(buildDir.resolve("dokka"))
-}
-
-tasks.register<Jar>("javadocJar") {
-    archiveClassifier.set("javadoc")
-    from(tasks.dokkaHtml)
 }
 
 tasks.register("closeAndReleaseRepositoryIfProductionRelease") {
