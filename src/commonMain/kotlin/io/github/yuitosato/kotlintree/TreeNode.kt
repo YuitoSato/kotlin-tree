@@ -30,6 +30,13 @@ sealed interface TreeNode<T> {
     fun <S> map(transform: (T) -> S): TreeNode<S>
 
     /**
+     * Applies a transformation function to each node in the tree in reverse order.
+     * @param transform Function that takes a ReversedMappingNode and returns a value of type S.
+     * @return A TreeNode containing the transformed nodes.
+     */
+    fun <S> reversedMapNode(transform: (ReversedMappingNode<T, S>) -> S): TreeNode<S>
+
+    /**
      * Performs the given [action] on each tree node.
      */
     fun <S> forEachNode(action: (TreeNode<T>) -> S)
@@ -156,7 +163,7 @@ fun <T> TreeNode<T>.toMutable(): MutableTreeNode<T> {
  * Mutable TreeNode
  */
 class MutableTreeNode<T> private constructor(
-    override val value: T,
+    override var value: T,
     override val children: MutableList<MutableTreeNode<T>>
 ) : TreeNode<T> {
 
@@ -182,6 +189,26 @@ class MutableTreeNode<T> private constructor(
     }
 
     override fun <S> map(transform: (T) -> S): MutableTreeNode<S> = mapNode { treeNode -> transform(treeNode.value) }
+
+    override fun <S> reversedMapNode(transform: (ReversedMappingNode<T, S>) -> S): TreeNode<S> {
+        val midNode: MutableTreeNode<ReversedMappingMidNodeValue<T, S>> = this.map { ReversedMappingMidNodeValue.BeforeValue(it) }
+        val funcStack: Stack<() -> Unit> = Stack()
+
+        midNode.forEachNode { treeNode ->
+            val mutableTreeNode = treeNode.asMutable()
+            val f = {
+                val afterValueChildren: List<MutableTreeNode<S>> = mutableTreeNode.children.map { node -> node.map { it.getAfterValue() } }
+                val targetNode = ReversedMappingNode(treeNode.value.getBeforeValue(), afterValueChildren)
+                mutableTreeNode.value = ReversedMappingMidNodeValue.AfterValue(transform(targetNode))
+            }
+            funcStack += f
+        }
+
+        (0 until funcStack.size()).forEach {
+            funcStack.pop()()
+        }
+        return midNode.map { it.getAfterValue() }
+    }
 
     override fun <S> forEachNode(action: (TreeNode<T>) -> S) {
         mapNode(action)
@@ -389,6 +416,30 @@ fun <T> MutableTreeNode<MutableTreeNode<T>>.flatten(prepend: Boolean): TreeNode<
     }
 
     return resultTree
+}
+
+data class ReversedMappingNode<T, S>(
+    val value: T,
+    val children: List<TreeNode<S>>
+)
+
+private sealed interface ReversedMappingMidNodeValue<out T, out S> {
+    data class BeforeValue<T>(val value: T) : ReversedMappingMidNodeValue<T, Nothing>
+    data class AfterValue<S>(val value: S) : ReversedMappingMidNodeValue<Nothing, S>
+
+    fun getBeforeValue(): T {
+        return when (this) {
+            is BeforeValue -> this.value
+            else -> throw Exception("Value is null")
+        }
+    }
+
+    fun getAfterValue(): S {
+        return when (this) {
+            is AfterValue -> this.value
+            else -> throw Exception("Value is null")
+        }
+    }
 }
 
 /**
