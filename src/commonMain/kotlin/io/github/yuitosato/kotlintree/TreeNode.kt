@@ -132,10 +132,8 @@ sealed interface TreeNode<T> {
  * If [prepend] is true, child nodes in each element are prepended to each node.
  */
 fun <T> TreeNode<TreeNode<T>>.flatten(prepend: Boolean): TreeNode<T> {
-    if (this is MutableTreeNode) {
-        return (this.map { it.asMutable() }.asMutable()).flatten(prepend)
-    } else {
-        throw Exception("TODO")
+    return when (this) {
+        is MutableTreeNode -> (this.map { it.asMutable() }.asMutable()).flatten(prepend)
     }
 }
 
