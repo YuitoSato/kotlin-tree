@@ -149,6 +149,40 @@ class TreeNodeTest : FunSpec({
         actual shouldBe expected
     }
 
+    test("reversedMapNode method applies to each values in tree node from bottom") {
+        val tree = nodeOf(
+            null,
+            listOf(
+                nodeOf(
+                    "11",
+                    listOf(
+                        leafOf("111"),
+                        leafOf(null)
+                    )
+                ),
+                leafOf("12")
+            )
+        )
+
+        val actual = tree.reversedMapNode<Int> { (it.value?.toInt() ?: 0) + it.transformedChildren.map { it.value }.sum() }
+
+        val expected = nodeOf(
+            134,
+            listOf(
+                nodeOf(
+                    122,
+                    listOf(
+                        leafOf(111),
+                        leafOf(0)
+                    )
+                ),
+                leafOf(12)
+            )
+        )
+
+        actual shouldBe expected
+    }
+
     test("forEachNode method applies function to each values in tree node") {
         val tree = nodeOf(
             1,
