@@ -157,7 +157,7 @@ class TreeNodeTest : FunSpec({
                     "11",
                     listOf(
                         leafOf("111"),
-                        leafOf(null),
+                        leafOf(null)
                     )
                 ),
                 leafOf("12")
@@ -173,7 +173,7 @@ class TreeNodeTest : FunSpec({
                     122,
                     listOf(
                         leafOf(111),
-                        leafOf(0),
+                        leafOf(0)
                     )
                 ),
                 leafOf(12)
