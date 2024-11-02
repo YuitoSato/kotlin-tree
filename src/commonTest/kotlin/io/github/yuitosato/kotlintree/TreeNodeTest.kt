@@ -164,7 +164,7 @@ class TreeNodeTest : FunSpec({
             )
         )
 
-        val actual = tree.reversedMapNode<Int> { (it.value?.toInt() ?: 0) + it.children.map { it.value }.sum() }
+        val actual = tree.reversedMapNode<Int> { (it.value?.toInt() ?: 0) + it.transformedChildren.map { it.value }.sum() }
 
         val expected = nodeOf(
             134,

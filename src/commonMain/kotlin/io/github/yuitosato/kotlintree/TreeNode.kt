@@ -420,7 +420,7 @@ fun <T> MutableTreeNode<MutableTreeNode<T>>.flatten(prepend: Boolean): TreeNode<
 
 data class ReversedMappingNode<T, S>(
     val value: T,
-    val children: List<TreeNode<S>>
+    val transformedChildren: List<TreeNode<S>>
 )
 
 private sealed interface ReversedMappingMidNodeValue<out T, out S> {
