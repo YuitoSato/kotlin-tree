@@ -28,8 +28,4 @@ object Test {
             }
         }.plus(AdjacencyListItem(null, 0, 0))
     ).toTreeNode().treeNodes.first()
-
-    val list = (0..1000000).toList()
-
-    val indices = (0 until 100).toList().map { 0 }
 }
