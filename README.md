@@ -90,10 +90,10 @@ val treeNode: TreeNode<Int> = nodeOf(1) {
 
 ### Tree Operations
 
-kotlin-tree provides APIs that operates the contents of nodes like Kotlin Collection APIs such as map, fold, etc.
+kotlin-tree provides APIs that operates the contents of nodes like Kotlin Collection APIs such as map, filter, etc.
 Also, kotlin-tree provides APIs that operates the nodes themselves. (It means lambda blocks receive TreeNode instances,
 not the contents of nodes T.)
-These methods are named xxxNode, mapNode, foldNode, etc.
+These methods are named xxxNode, mapNode, filterNode, etc.
 
 ```kt
 val treeNode: TreeNode<Int> = nodeOf(
@@ -123,6 +123,12 @@ treeNode.mapNode { node -> node.value * 2 }
 // │   ├── 222
 // │   └── 224
 // └── 24
+
+treeNode.filter { ele -> ele % 2 != 0 }
+treeNode.filterNode { node -> node.value % 2 != 0 }
+// 1
+// └── 11
+//     └── 111
 
 treeNode.find { ele -> ele > 10 }
 treeNode.findNode { node -> node.value > 10 }

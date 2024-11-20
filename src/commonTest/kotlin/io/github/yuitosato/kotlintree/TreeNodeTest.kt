@@ -234,6 +234,90 @@ class TreeNodeTest : FunSpec({
         actual shouldBe expected
     }
 
+    test("filterNode method filters a tree node that matches a condition") {
+        val tree = nodeOf(
+            1,
+            listOf(
+                nodeOf(
+                    11,
+                    listOf(
+                        leafOf(111)
+                    )
+                ),
+                leafOf(12),
+                leafOf(13)
+            )
+        )
+
+        val actual = tree.filterNode { treeNode ->
+            treeNode.find { it == 111 }.isNotEmpty()
+        }
+
+        val expected = nodeOf(
+            1,
+            listOf(
+                nodeOf(
+                    11,
+                    listOf(
+                        leafOf(111)
+                    )
+                )
+            )
+        )
+
+        actual shouldBe expected
+    }
+
+    test("filterNode method returns null if the top of the tree node does not match a condition.") {
+        val tree = nodeOf(
+            1,
+            listOf(
+                nodeOf(
+                    11,
+                    listOf(
+                        leafOf(111)
+                    )
+                ),
+                leafOf(12)
+            )
+        )
+
+        val actual = tree.filterNode { it.value < 1 }
+
+        actual shouldBe null
+    }
+
+    test("filter method filters a tree node that matches a condition") {
+        val tree = nodeOf(
+            1,
+            listOf(
+                nodeOf(
+                    11,
+                    listOf(
+                        leafOf(111)
+                    )
+                ),
+                leafOf(12),
+                leafOf(13)
+            )
+        )
+
+        val actual = tree.filter { it <= 12 }
+
+        val expected = nodeOf(
+            1,
+            listOf(
+                nodeOf(
+                    11,
+                    listOf()
+                ),
+                leafOf(12)
+            )
+        )
+
+        actual shouldBe expected
+    }
+
     test("findNode method finds tree nodes that matches the condition") {
         val tree = nodeOf(
             1,
