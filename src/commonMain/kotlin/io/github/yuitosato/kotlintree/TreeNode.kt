@@ -47,16 +47,6 @@ sealed interface TreeNode<T> {
     fun <S> forEach(action: (T) -> S)
 
     /**
-     * Returns a tree node containing only tree nodes matching the given [predicate].
-     */
-    fun filterNode(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>?
-
-    /**
-     * Returns a tree node containing only elements matching the given [predicate].
-     */
-    fun filter(predicate: (T) -> Boolean): TreeNode<T>?
-
-    /**
      * Returns tree nodes matching the given [predicate].
      */
     fun findNode(predicate: (TreeNode<T>) -> Boolean): List<TreeNode<T>>
@@ -213,26 +203,6 @@ class MutableTreeNode<T> private constructor(
     }
 
     override fun <S> forEach(action: (T) -> S) = forEachNode { treeNode -> action(treeNode.value) }
-
-    override fun filterNode(predicate: (TreeNode<T>) -> Boolean): MutableTreeNode<T>? {
-        val initial: MutableTreeNode<T>? = null
-        return foldNodeInternal(initial) { acc, treeNode, indices ->
-            val condition = predicate(treeNode)
-            val newTreeNode = of(treeNode.value)
-            when {
-                !condition -> acc
-                acc == null -> newTreeNode
-                else -> {
-                    acc.getOrNull(indices.take(indices.size - 1))
-                        ?.children?.add(newTreeNode)
-                    acc
-                }
-            }
-        }
-    }
-
-    override fun filter(predicate: (T) -> Boolean): MutableTreeNode<T>? =
-        filterNode { treeNode -> predicate(treeNode.value) }
 
     override fun findNode(predicate: (TreeNode<T>) -> Boolean): List<MutableTreeNode<T>> {
         val initial: List<MutableTreeNode<T>> = listOf()
