@@ -218,12 +218,15 @@ class MutableTreeNode<T> private constructor(
         val initial: MutableTreeNode<T>? = null
         return foldNodeInternal(initial) { acc, treeNode, indices ->
             val condition = predicate(treeNode)
-            val newTreeNode = of(treeNode.value)
             when {
                 !condition -> acc
-                acc == null -> newTreeNode
+                indices.isEmpty() -> {
+                    val newTreeNode = of(treeNode.value)
+                    newTreeNode
+                }
                 else -> {
-                    acc.getOrNull(indices.take(indices.size - 1))
+                    val newTreeNode = of(treeNode.value)
+                    acc?.getOrNull(indices.take(indices.size - 1))
                         ?.children?.add(newTreeNode)
                     acc
                 }
