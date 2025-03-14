@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "io.github.yuitosato"
-version = "3.0.2"
+version = "3.1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -47,27 +47,10 @@ kotlin {
     }
 
     /* https://kotlinlang.org/docs/native-target-support.html#tier-1 */
-
     macosX64()
     macosArm64()
     iosSimulatorArm64()
     iosX64()
-
-    /* https://kotlinlang.org/docs/native-target-support.html#tier-2 */
-
-    linuxX64()
-    linuxArm64()
-
-    watchosSimulatorArm64()
-    watchosX64()
-    watchosArm32()
-    watchosArm64()
-
-    tvosSimulatorArm64()
-    tvosX64()
-    tvosArm64()
-
-    iosArm64()
 
     sourceSets {
         val commonTest by getting {
