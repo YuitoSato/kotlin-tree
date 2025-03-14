@@ -332,37 +332,54 @@ class TreeNodeTest : FunSpec({
     }
 
     test("filter method filters a tree node that matches a not null condition") {
-        val actual = nodeOf(1, listOf(
-            nodeOf(11, listOf(
-                leafOf(111),
-                nodeOf(null, children = listOf(
-                    leafOf(null),
-                    leafOf(1122),
-                )),
+        val actual = nodeOf(
+            1,
+            listOf(
                 nodeOf(
-                    112, listOf(
-                        leafOf(1121),
-                        leafOf(1122),
+                    11,
+                    listOf(
+                        leafOf(111),
+                        nodeOf(
+                            null,
+                            children = listOf(
+                                leafOf(null),
+                                leafOf(1122)
+                            )
+                        ),
+                        nodeOf(
+                            112,
+                            listOf(
+                                leafOf(1121),
+                                leafOf(1122)
 
-                        )
-                ),
-                leafOf(113),
-            ))
-        )).filter { it != null }
+                            )
+                        ),
+                        leafOf(113)
+                    )
+                )
+            )
+        ).filter { it != null }
 
-        val expected = nodeOf(1, listOf(
-            nodeOf(11, listOf(
-                leafOf(111),
+        val expected = nodeOf(
+            1,
+            listOf(
                 nodeOf(
-                    112, listOf(
-                        leafOf(1121),
-                        leafOf(1122),
+                    11,
+                    listOf(
+                        leafOf(111),
+                        nodeOf(
+                            112,
+                            listOf(
+                                leafOf(1121),
+                                leafOf(1122)
 
-                        )
-                ),
-                leafOf(113),
-            ))
-        ))
+                            )
+                        ),
+                        leafOf(113)
+                    )
+                )
+            )
+        )
 
         actual shouldBe expected
     }

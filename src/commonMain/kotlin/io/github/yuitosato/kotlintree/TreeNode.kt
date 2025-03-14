@@ -216,7 +216,7 @@ class MutableTreeNode<T> private constructor(
 
     override fun filterNode(predicate: (TreeNode<T>) -> Boolean): MutableTreeNode<T>? {
         if (!predicate(this)) return null
-        
+
         val filteredChildren = children.mapNotNull { it.filterNode(predicate) }
         return of(value, filteredChildren.toMutableList())
     }
