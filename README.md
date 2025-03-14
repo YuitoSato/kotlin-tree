@@ -10,7 +10,7 @@ Easy to convert trees to other tree models, Path Enumeration Models and Adjacenc
 
 ```kts
 dependencies {
-    implementation("io.github.yuitosato:kotlin-tree:3.0.0")
+    implementation("io.github.yuitosato:kotlin-tree:3.0.2")
 }
 ```
 
@@ -20,7 +20,7 @@ dependencies {
 <dependency>
     <groupId>io.github.yuitosato</groupId>
     <artifactId>kotlin-tree</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
 </dependency>
 ```
 
