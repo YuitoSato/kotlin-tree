@@ -215,24 +215,10 @@ class MutableTreeNode<T> private constructor(
     override fun <S> forEach(action: (T) -> S) = forEachNode { treeNode -> action(treeNode.value) }
 
     override fun filterNode(predicate: (TreeNode<T>) -> Boolean): MutableTreeNode<T>? {
-        val initial: MutableTreeNode<T>? = null
-        return foldNodeInternal(initial) { acc, treeNode, indices ->
-            val condition = predicate(treeNode)
-            val level = indices.size
-            when {
-                !condition -> acc
-                level == 0 -> {
-                    val newTreeNode = of(treeNode.value)
-                    newTreeNode
-                }
-                else -> {
-                    val newTreeNode = of(treeNode.value)
-                    acc?.getOrNull(indices.take(indices.size - 1))
-                        ?.children?.add(newTreeNode)
-                    acc
-                }
-            }
-        }
+        if (!predicate(this)) return null
+        
+        val filteredChildren = children.mapNotNull { it.filterNode(predicate) }
+        return of(value, filteredChildren.toMutableList())
     }
 
     override fun filter(predicate: (T) -> Boolean): MutableTreeNode<T>? =
